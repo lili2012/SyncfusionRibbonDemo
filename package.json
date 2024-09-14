@@ -1,0 +1,33 @@
+{
+  "name": "syncfusiondemo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@syncfusion/ej2-base": "^26.2.10",
+    "@syncfusion/ej2-vue-buttons": "^26.2.10",
+    "@syncfusion/ej2-vue-calendars": "^26.2.12",
+    "@syncfusion/ej2-vue-dropdowns": "^26.2.13",
+    "@syncfusion/ej2-vue-inputs": "^26.2.14",
+    "@syncfusion/ej2-vue-lists": "^26.2.14",
+    "@syncfusion/ej2-vue-navigations": "^26.2.12",
+    "@syncfusion/ej2-vue-popups": "^26.2.11",
+    "@syncfusion/ej2-vue-ribbon": "^26.2.10",
+    "@syncfusion/ej2-vue-schedule": "^26.2.14",
+    "@syncfusion/ej2-vue-splitbuttons": "^26.2.10",
+    "vue": "^3.4.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "terser": "^5.32.0",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vue-tsc": "^2.0.29"
+  }
+}

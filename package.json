@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@syncfusion/ej2-base": "^26.2.10",
+    "@syncfusion/ej2-icons": "^26.2.10",
     "@syncfusion/ej2-vue-buttons": "^26.2.10",
     "@syncfusion/ej2-vue-calendars": "^26.2.12",
     "@syncfusion/ej2-vue-dropdowns": "^26.2.13",
@@ -20,7 +21,7 @@
     "@syncfusion/ej2-vue-ribbon": "^26.2.10",
     "@syncfusion/ej2-vue-schedule": "^26.2.14",
     "@syncfusion/ej2-vue-splitbuttons": "^26.2.10",
-    "vue": "^3.4.37"
+    "vue": "3.5.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

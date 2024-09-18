@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, createApp } from "vue";
+import { provide, useTemplateRef, createApp, onMounted } from "vue";
 import { createElement } from '@syncfusion/ej2-base';
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
@@ -84,6 +84,11 @@ const rectangleButton = { iconCss: "e-icons e-frame-5", content: "Rectangle" };
 const ellipseButton = { iconCss: "e-icons e-triangle", content: "Ellipse" };
 const regionButton = { iconCss: "e-icons e-table", content: "Region" };
 
+onMounted(() => {
+  const tabObj = TabInstance.value!.ej2Instances;
+  tabObj.animation.previous.effect = 'None'
+  tabObj.animation.next.effect = 'None'
+});
 
 const addNewTab = {
   iconCss: "e-icons e-add-notes", content: "New Drawing",
@@ -105,13 +110,13 @@ const headerText0 = { text: "平面图" };
 const headerText1 = { text: "立面图" };
 const headerText2 = { text: "详图" };
 const content0 =
-  "              肥西核电站平面图";
+  "肥西核电站平面图";
 
 const content1 =
-  "              肥西核电站立面图";
+  "肥西核电站立面图";
 
 const content2 =
-  "               肥西核电站详图";
+  "肥西核电站详图";
 </script>
 
 <style>
@@ -125,7 +130,9 @@ const content2 =
 @import "@syncfusion/ej2-vue-navigations/styles/fluent.css";
 @import "@syncfusion/ej2-vue-ribbon/styles/fluent.css";
 @import "@syncfusion/ej2-icons/styles/fluent.css";
+</style>
 
+<style scoped>
 .ribbonTemplate {
   display: flex;
   align-items: center;
@@ -155,26 +162,11 @@ const content2 =
   justify-content: center;
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-#app {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-}
-
-#app .header {
+.header {
   flex: 0 1 auto;
 }
 
-#app .content {
+.content {
   flex: 1 1 auto;
 }
-
-
-
 </style>

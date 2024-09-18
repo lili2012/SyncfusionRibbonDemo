@@ -109,14 +109,9 @@ const addNewTab = {
 const headerText0 = { text: "平面图" };
 const headerText1 = { text: "立面图" };
 const headerText2 = { text: "详图" };
-const content0 =
-  "肥西核电站平面图";
-
-const content1 =
-  "肥西核电站立面图";
-
-const content2 =
-  "肥西核电站详图";
+const content0 = "肥西核电站平面图";
+const content1 = "肥西核电站立面图";
+const content2 = "肥西核电站详图";
 </script>
 
 <style>

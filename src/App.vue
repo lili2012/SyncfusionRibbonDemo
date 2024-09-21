@@ -60,13 +60,12 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, createApp, onMounted } from "vue";
+import { provide, useTemplateRef, onMounted, defineCustomElement } from "vue";
 import { createElement } from '@syncfusion/ej2-base';
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem } from "@syncfusion/ej2-vue-navigations";
-import child from "./components/Child.vue"
-//import HelloWorld from "./components/HelloWorld.ce.vue"
+import HelloWorld from "./components/HelloWorld.ce.vue"
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -88,21 +87,29 @@ onMounted(() => {
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
+
+  const HelloWorldComponent = defineCustomElement(HelloWorld, { shadowRoot: true })
+  customElements.define('hello-world', HelloWorldComponent)
 });
 
 const addNewTab = {
   iconCss: "e-icons e-add-notes", content: "New Drawing",
   clicked: () => {
     const tabObj = TabInstance.value!.ej2Instances;
-    //const mountPoint = document.createElement("div");
-    const container = createElement('div')
-    const shadowRoot = container.attachShadow({ mode: "open" })
-    createApp(child).mount(shadowRoot as any);
+    //https://github.com/vuejs/core/pull/11517
+    //https://github.com/ElMassimo/vue-custom-element-example
+    //https://github.com/vuejs/core/issues/4662
+    //https://github.com/EranGrin/vue-web-component-wrapper?tab=readme-ov-file
 
-    const item = { header: { text: "drawing1" }, content: container };
-    const existItems = document.querySelectorAll('#tab .e-toolbar-item')
-    const nItems = existItems.length;
-    tabObj.addTab([item], nItems);
+    const customElement = customElements.get('hello-world')
+    if (customElement) {
+      const shadowElement = new customElement({})
+      const item = { header: { text: "drawing1" }, content: shadowElement };
+      const existItems = document.querySelectorAll('#tab .e-toolbar-item')
+      const nItems = existItems.length;
+      tabObj.addTab([item], nItems);
+    }
+
   }
 };
 

@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    //https://mkay11.medium.com/how-to-deploy-your-vite-vue-3-application-in-github-pages-2023-2b842f50576a
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@syncfusion/ej2-base": "^26.2.10",
@@ -26,6 +29,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "gh-pages": "^6.1.1",
     "terser": "^5.32.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",

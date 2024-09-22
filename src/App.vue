@@ -49,22 +49,22 @@
       </e-ribbon-tab>
     </e-ribbon-tabs>
   </ejs-ribbon>
-  <ejs-tab class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup'
-    headerPlacement="Bottom" cssClass="e-fill">
+  <ejs-tab class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup' headerPlacement="Bottom" cssClass="e-fill" :selected ='selected' :removing='removing' :showCloseButton=true>
     <e-tabitems>
       <e-tabitem :header="headerText0" :content="content0"></e-tabitem>
       <e-tabitem :header="headerText1" :content="content1"></e-tabitem>
       <e-tabitem :header="headerText2" :content="content2"></e-tabitem>
+      <e-tabitem :header='addTabHeader' cssClass="withoutIcon" ></e-tabitem>
     </e-tabitems>
   </ejs-tab>
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, onMounted, defineCustomElement } from "vue";
+import { provide, useTemplateRef, onMounted,  } from "vue";
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem } from "@syncfusion/ej2-vue-navigations";
-import HelloWorld from "./components/HelloWorld.ce.vue"
+
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -87,14 +87,33 @@ onMounted(() => {
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
 
-  const HelloWorldComponent = defineCustomElement(HelloWorld, { shadowRoot: true })
-  customElements.define('hello-world', HelloWorldComponent)
+
 });
 
-const addNewTab = {
-  iconCss: "e-icons e-add-notes", content: "New Drawing",
-  clicked: () => {
+const selected = (args)=>{
+  if(args.isInteracted){
+    const selectingIndex = args.selectingIndex 
     const tabObj = TabInstance.value!.ej2Instances;
+    const existItems = tabObj.items
+    const n = existItems.length
+    if(selectingIndex === (n-1)){
+      addNewPage()
+    }
+  }
+}
+
+const removing = (args)=>{
+  const removedIndex = args.removedIndex 
+  const tabObj = TabInstance.value!.ej2Instances;
+  const existItems = tabObj.items
+  const n = existItems.length 
+  if(removedIndex === (n-2)){
+    tabObj.select(n-3)
+  }
+}
+
+const addNewPage = ()=>{
+  const tabObj = TabInstance.value!.ej2Instances;
     //https://github.com/vuejs/core/pull/11517
     //https://github.com/ElMassimo/vue-custom-element-example
     //https://github.com/vuejs/core/issues/4662
@@ -105,16 +124,21 @@ const addNewTab = {
       const shadowElement = new customElement({})
       const item = { header: { text: "drawing1" }, content: shadowElement };
       const existItems = document.querySelectorAll('#tab .e-toolbar-item')
-      const nItems = existItems.length;
-      tabObj.addTab([item], nItems);
+      const insertIndex = existItems.length - 1;
+      tabObj.addTab([item], insertIndex);
+      tabObj.select(insertIndex)
     }
+}
 
-  }
+const addNewTab = {
+  iconCss: "e-icons e-add-notes", content: "New Drawing",
+  clicked: addNewPage
 };
 
 const headerText0 = { text: "平面图" };
 const headerText1 = { text: "立面图" };
 const headerText2 = { text: "详图" };
+const addTabHeader = {'iconCss': 'e-plus'}
 const content0 = "肥西核电站平面图";
 const content1 = "肥西核电站立面图";
 const content2 = "肥西核电站详图";
@@ -131,6 +155,11 @@ const content2 = "肥西核电站详图";
 @import "@syncfusion/ej2-vue-navigations/styles/fluent.css";
 @import "@syncfusion/ej2-vue-ribbon/styles/fluent.css";
 @import "@syncfusion/ej2-icons/styles/fluent.css";
+
+.e-tab .e-tab-header .e-toolbar-item.withoutIcon span.e-icons.e-close-icon {
+    display: none; 
+} 
+
 </style>
 
 <style scoped>
@@ -163,6 +192,10 @@ const content2 = "肥西核电站详图";
   justify-content: center;
 }
 
+.e-add-icon::before {
+    content: '\e823';
+}
+
 .header {
   flex: 0 1 auto;
 }
@@ -170,4 +203,6 @@ const content2 = "肥西核电站详图";
 .content {
   flex: 1 1 auto;
 }
+
+
 </style>

@@ -122,6 +122,11 @@ const addNewPage = ()=>{
     const customElement = customElements.get('hello-world')
     if (customElement) {
       const shadowElement = new customElement({})
+      
+     //https://stackoverflow.com/questions/9519841/why-does-this-css-margin-top-style-not-work/9519933#9519933
+      //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/
+      //shadowElement.style.overflow ="hidden"
+      shadowElement.style.position= "absolute"
       const item = { header: { text: "drawing1" }, content: shadowElement };
       const existItems = document.querySelectorAll('#tab .e-toolbar-item')
       const insertIndex = existItems.length - 1;

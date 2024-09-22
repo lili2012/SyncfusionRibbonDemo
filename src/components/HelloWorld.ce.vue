@@ -1,38 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Button from './Button.ce.vue'
+//import { ref } from 'vue'
+//import Button from './Button.ce.vue'
 //defineProps<{ msg: string }>()
-
-const count = ref(0)
 </script>
 
 <template>
-  <!-- <h1>{{ msg }}</h1> -->
-
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
     <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
+    这个网页被嵌入到shadow dom中。
     </p>
-  </div>
-
   <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the official Vue + Vite
-    starter
+    了解shadow dom应用案例：
+    <a href="https://jelly.jd.com/article/615020c42685d0019947426c" target="_blank">视觉走查插件开发之深入Shadow DOM</a>.
   </p>
   <p>
-    Learn more about IDE Support for Vue in the
-    <a href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support" target="_blank">Vue Docs Scaling up Guide</a>.
+    了解shadow dom技术原理：
+    <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM" target="_blank">Using shadow DOM</a>.
   </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
-  <Button />
+  <!-- <Button /> -->
 
 </template>
 
 <style scoped>
 p {
-  color: #0b3fe8;
+  color: black;
 }
 </style>

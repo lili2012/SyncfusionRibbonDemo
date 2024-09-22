@@ -63,7 +63,7 @@
 import { provide, useTemplateRef, onMounted,  } from "vue";
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
-import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem } from "@syncfusion/ej2-vue-navigations";
+import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem,SelectEventArgs,RemoveEventArgs } from "@syncfusion/ej2-vue-navigations";
 
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
@@ -90,19 +90,19 @@ onMounted(() => {
 
 });
 
-const selected = (args)=>{
+const selected = (args: SelectEventArgs)=>{
   if(args.isInteracted){
-    const selectingIndex = args.selectingIndex 
+    const selectedIndex = args.selectedIndex 
     const tabObj = TabInstance.value!.ej2Instances;
     const existItems = tabObj.items
     const n = existItems.length
-    if(selectingIndex === (n-1)){
+    if(selectedIndex === (n-1)){
       addNewPage()
     }
   }
 }
 
-const removing = (args)=>{
+const removing = (args: RemoveEventArgs)=>{
   const removedIndex = args.removedIndex 
   const tabObj = TabInstance.value!.ej2Instances;
   const existItems = tabObj.items

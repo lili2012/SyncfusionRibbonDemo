@@ -13,7 +13,7 @@
     <a href="https://jelly.jd.com/article/615020c42685d0019947426c" target="_blank">视觉走查插件开发之深入Shadow DOM</a>.
   </p>
   <p>
-    了解shadow dom技术原理：
+    shadow dom官方技术文档：
     <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM" target="_blank">Using shadow DOM</a>.
   </p>
   <!-- <Button /> -->

@@ -112,6 +112,7 @@ const removing = (args: RemoveEventArgs)=>{
   }
 }
 
+let drawingNumber = 1;
 const addNewPage = ()=>{
   const tabObj = TabInstance.value!.ej2Instances;
     //https://github.com/vuejs/core/pull/11517
@@ -127,7 +128,9 @@ const addNewPage = ()=>{
       //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/
       //shadowElement.style.overflow ="hidden"
       shadowElement.style.position= "absolute"
-      const item = { header: { text: "drawing1" }, content: shadowElement };
+      const drawingTitle = "drawing" + drawingNumber.toString()
+      drawingNumber = drawingNumber + 1
+      const item = { header: { text: drawingTitle}, content: shadowElement };
       const existItems = document.querySelectorAll('#tab .e-toolbar-item')
       const insertIndex = existItems.length - 1;
       tabObj.addTab([item], insertIndex);

@@ -128,6 +128,8 @@ const addNewPage = ()=>{
       //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/
       //shadowElement.style.overflow ="hidden"
       shadowElement.style.position= "absolute"
+      shadowElement.style.width= "100%"
+      shadowElement.style.height= "100%"
       const drawingTitle = "drawing" + drawingNumber.toString()
       drawingNumber = drawingNumber + 1
       const item = { header: { text: drawingTitle}, content: shadowElement };

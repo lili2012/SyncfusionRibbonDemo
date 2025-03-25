@@ -6,14 +6,31 @@
 
 
 <script setup lang="ts">
+const props = defineProps<{
+  drawing?: string,
+  fonts: string[]
+}>()
+
 import {DxfViewer} from "dxf-viewer"
 import * as three from "three"
 import { useTemplateRef, onMounted } from "vue";
-import mainFont from "@/assets/fonts/Roboto-LightItalic.ttf"
-import aux1Font from "@/assets/fonts/NotoSansDisplay-SemiCondensedLightItalic.ttf"
-import aux2Font from "@/assets/fonts/HanaMinA.ttf"
-import aux3Font from "@/assets/fonts/NanumGothic-Regular.ttf"
-const fonts = [mainFont, aux1Font, aux2Font, aux3Font]
+
+
+
+function onVisible() {
+  dxfViewer.Render()
+}    
+
+function onHide() {
+ 
+}  
+
+defineExpose({
+  onVisible,
+  onHide
+});
+
+
 const canvasContainer = useTemplateRef('canvasContainer')
 const options = {
                     clearColor: new three.Color("#fff"),
@@ -36,7 +53,7 @@ async function Load(url:string) {
   try {
     await dxfViewer!.Load({
       url,
-      fonts: fonts,
+      fonts: props.fonts,
       progressCbk: null,
       workerFactory: null
     })
@@ -45,18 +62,20 @@ async function Load(url:string) {
   }
 }
 
-const url = "http://localhost:3000/Drawing4.dxf"
+const url = "http://localhost:3000/"
 
 
 onMounted(async() => {
 
   dxfViewer= new DxfViewer(canvasContainer.value!, options)
-  await Load(url)
+  await Load(url + props.drawing)
 
 
 
 
 })
+
+
 // ondestroyed() {
 //   this.dxfViewer.Destroy()
 //   this.dxfViewer = null

@@ -31,6 +31,7 @@ export default defineConfig({
   build: {
     target: "esnext",
     minify: 'terser',
+    sourcemap: true,
     terserOptions: {
       format: { comments: false },
       compress: {

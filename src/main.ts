@@ -7,5 +7,6 @@ HelloWorld.inheritAttrs = false;
 const HelloWorldComponent = defineCustomElement(HelloWorld, { shadowRoot: true })
 customElements.define('hello-world', HelloWorldComponent)
 
-registerLicense('ORg4AjUWIQA/Gnt2XVhhQlJHfVtdWnxLflFzVWZTfFx6dVBWESFaRnZdR11gS3pTdEBgWXlbdXdS');
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NNaF5cXmZCe0xwWmFZfVtgdVRMYllbRn9PIiBoS35Rc0VnWXhedHVVRmFdVUZ+VEBU');
+                
 createApp(App).mount('#app')

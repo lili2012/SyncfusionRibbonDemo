@@ -49,7 +49,7 @@
       </e-ribbon-tab>
     </e-ribbon-tabs>
   </ejs-ribbon>
-  <ejs-tab class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup' headerPlacement="Bottom" cssClass="e-fill" :selected ='selected' :removing='removing' :showCloseButton=true>
+  <ejs-tab  swipeMode='None' class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup' headerPlacement="Bottom" cssClass="e-fill" :selected ='selected' :removing='removing' :showCloseButton=true>
     <e-tabitems>
       <e-tabitem :header="headerText0" :content="content0"></e-tabitem>
       <e-tabitem :header="headerText1" :content="content1"></e-tabitem>
@@ -106,15 +106,15 @@ const selected = (args: SelectEventArgs)=>{
     if(selectedIndex === (n-1)){
       addNewPage()
     }
-    const currItem = existItems[args.selectedIndex]
-    if(currItem.content.onVisible){
-      currItem.content.onVisible()
-    }
+    //const currItem = existItems[args.selectedIndex]
+    // if(currItem.content.onVisible){
+    //   currItem.content.onVisible()
+    // }
 
-    const previousItem = existItems[args.previousIndex]
-    if(previousItem.content.onHide){
-      previousItem.content.onHide()
-    }
+    // const previousItem = existItems[args.previousIndex]
+    // if(previousItem.content.onHide){
+    //   previousItem.content.onHide()
+    // }
   }
 }
 
@@ -172,21 +172,27 @@ const content2 = "肥西核电站详图";
 </script>
 
 <style>
-@import "@syncfusion/ej2-base/styles/fluent.css";
-@import "@syncfusion/ej2-vue-buttons/styles/fluent.css";
-@import "@syncfusion/ej2-vue-popups/styles/fluent.css";
-@import "@syncfusion/ej2-vue-splitbuttons/styles/fluent.css";
-@import "@syncfusion/ej2-vue-inputs/styles/fluent.css";
-@import "@syncfusion/ej2-vue-lists/styles/fluent.css";
-@import "@syncfusion/ej2-vue-dropdowns/styles/fluent.css";
-@import "@syncfusion/ej2-vue-navigations/styles/fluent.css";
-@import "@syncfusion/ej2-vue-ribbon/styles/fluent.css";
-@import "@syncfusion/ej2-icons/styles/fluent.css";
+@import "@syncfusion/ej2-base/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-buttons/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-popups/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-splitbuttons/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-inputs/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-lists/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-dropdowns/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-navigations/styles/fabric-dark.css";
+@import "@syncfusion/ej2-vue-ribbon/styles/fabric-dark.css";
+@import "@syncfusion/ej2-icons/styles/fabric.css";
 
 .e-tab .e-tab-header .e-toolbar-item.withoutIcon span.e-icons.e-close-icon {
     display: none; 
 } 
-
+.e-tab .e-tab-header {
+    background-color: #333232;
+}
+.e-tab.e-fill .e-tab-header.e-horizontal-bottom {
+    border-bottom: 0;
+    border-top: 0px Solid #0074cc;
+}
 </style>
 
 <style scoped>

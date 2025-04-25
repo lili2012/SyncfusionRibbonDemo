@@ -5,6 +5,9 @@ import viteCompression from 'vite-plugin-compression';
 // https://vitejs.dev/config/
 export default defineConfig({
   //base: "/SyncfusionRibbonDemo/",
+  preview: {
+    port: 5173,
+  },
   plugins: [vue({
     template: {
       compilerOptions: {
@@ -35,7 +38,7 @@ export default defineConfig({
     terserOptions: {
       format: { comments: false },
       compress: {
-        drop_console: true,
+        //drop_console: true,
         drop_debugger: true,
       },
       ecma: 2020,

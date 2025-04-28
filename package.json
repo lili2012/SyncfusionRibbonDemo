@@ -24,8 +24,9 @@
     "@syncfusion/ej2-vue-ribbon": "29.1.33",
     "@syncfusion/ej2-vue-schedule": "29.1.33",
     "@syncfusion/ej2-vue-splitbuttons": "29.1.33",
-    "SGCAD": "workspace:*",
     "pinia": "^3.0.1",
+    "protobufjs": "^7.4.0",
+    "sgcad": "workspace:*",
     "three": "^0.161.0",
     "vue": "^3.5.13"
   },

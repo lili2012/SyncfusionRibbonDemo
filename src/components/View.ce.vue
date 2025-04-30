@@ -10,11 +10,13 @@ const props = defineProps<{
   db: SGDb,
   block: SGBlock,
   isModel: true,
+  drawingShowSpinner:  ()=>void,
+  drawingHideSpinner: ()=>void,
 }>()
 
 import { SGDb, Viewport, SGBlock } from "sgcad"
-import * as three from "three"
-import { useTemplateRef, onMounted } from "vue";
+
+import { useTemplateRef, onMounted, onBeforeMount} from "vue";
 
 
 
@@ -33,18 +35,23 @@ defineExpose({
 
 
 const canvasContainer = useTemplateRef('canvasContainer')
-const options = {
-  clearColor: new three.Color("#000000"),
-  autoResize: true,
-  colorCorrection: false,
-  sceneOptions: {
-    wireframeMesh: true
-  }
-}
-let viewport: Viewport
 
+let viewport: Viewport
+onBeforeMount(()=>{
+  
+
+})
+
+function showView(){
+  viewport = new Viewport(canvasContainer.value!, props.block, props.db, props.isModel)
+  props.drawingHideSpinner()
+}
 onMounted(async () => {
-  viewport = new Viewport(canvasContainer.value!, props.block, props.db, props.isModel, options)
+  if(!props.isModel){
+    props.drawingShowSpinner()
+  }
+  setTimeout(showView, 0)
+
 
 })
 

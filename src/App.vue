@@ -49,7 +49,7 @@
       </e-ribbon-tab>
     </e-ribbon-tabs>
   </ejs-ribbon>
-  <ejs-tab  swipeMode='None' class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup' headerPlacement="Top" cssClass="e-fill" :selected ='selected' :removing='removing' :showCloseButton=true>
+  <ejs-tab  :selectedItem=0 swipeMode='None' class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Scrollable' headerPlacement="Top" cssClass="e-fill" :selected ='selected' :removing='removing' :showCloseButton=true>
     <e-tabitems>
       <e-tabitem :header="headerText0" :content="content0"></e-tabitem>
       <e-tabitem :header="headerText1" :content="content1"></e-tabitem>
@@ -129,7 +129,8 @@ const removing = (args: RemoveEventArgs)=>{
 }
 
 let drawingNumber = 1;
-const url = "http://localhost:3000/"
+//const url = "http://localhost:3000/"
+const url = "http://192.168.1.100:3000/"
 const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
 const addNewPage = ()=>{
   const tabObj = TabInstance.value!.ej2Instances;
@@ -156,7 +157,8 @@ const addNewPage = ()=>{
       const existItems = document.querySelectorAll('#tab .e-toolbar-item')
       const insertIndex = existItems.length - 1;
       tabObj.addTab([item], insertIndex);
-      tabObj.select(insertIndex)
+      tabObj.selectedItem = insertIndex
+      //tabObj.select(insertIndex)
     }
 }
 

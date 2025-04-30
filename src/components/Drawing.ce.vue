@@ -1,7 +1,9 @@
 <template>
-  <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Popup'
-    headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false>
+  <div id="parent" ref='ParentInstance'>
+  <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Scrollable'
+    headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false >
   </ejs-tab>
+</div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
@@ -12,12 +14,23 @@ const props = defineProps<{
 import { TabComponent as EjsTab } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "./FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
-import { SGDb, TextRenderer, SGBlock } from "sgcad"
-
+import { SGDb, TextRenderer, Layout } from "sgcad"
+import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 const TabInstance = useTemplateRef('TabInstance')
-
-
+const ParentInstance = useTemplateRef('ParentInstance')
+function drawingShowSpinner (){
+  showSpinner(this!);
+}
+function drawingHideSpinner(){
+  hideSpinner(this!);
+}
 onMounted(async () => {
+  createSpinner({
+    target: ParentInstance.value!,
+  });
+  const drawingShowSpinnerBind = drawingShowSpinner.bind(ParentInstance.value!)
+  const drawingHideSpinnerBind = drawingHideSpinner.bind(ParentInstance.value!)
+  drawingShowSpinnerBind()
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
@@ -30,29 +43,36 @@ onMounted(async () => {
   const textRenderer = new TextRenderer
   await textRenderer.init(db.textStyles);
   const blockTable = sgdb.blockTable
-  const modelBlock = blockTable.getByName("*Model_Space")!
-  modelBlock.calculateBlockBound(blockTable)
-  const paperBlock = blockTable.getByName("*Paper_Space")!
 
+  const layouts: Layout[] = db.layouts
   const customElement = customElements.get('view-page')
-  if (customElement) {
-
-      const modelView = new customElement({db: sgdb, block: modelBlock, isModel: true})
-      modelView.style.position= "absolute"
-      modelView.style.width= "100%"
-      modelView.style.height= "100%"
-      const paperView = new customElement({db: sgdb, block: paperBlock, isModel: false})
-      paperView.style.position= "absolute"
-      paperView.style.width= "100%"
-      paperView.style.height= "100%"
-
-   
-      const modelItem = { header: { text: "模型"}, content: modelView };
-      const paperItem = { header: { text: "布局"}, content: paperView };
-
-      tabObj.addTab([modelItem, paperItem]);
-      tabObj.select(0)
+  if (!customElement)
+    return
+  const n = layouts.length
+  const items = []
+  for (let i = 0; i < n; i++) {
+    const layout = layouts[i]
+    const blockid = layout.paperSpaceId
+    const block = blockTable.getById(blockid)
+    if (block) {
+      const name = layout.name
+      let isModel = false
+      if (i === 0) {
+        isModel = true
+        block.calculateBlockBound(blockTable)
+      }
+      const modelView = new customElement({ db: sgdb, block, isModel: i === 0, drawingShowSpinner:drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind })
+      modelView.style.position = "absolute"
+      modelView.style.width = "100%"
+      modelView.style.height = "100%"
+      const item = { header: { text: name }, content: modelView };
+      items.push(item)
+    }
   }
+
+  tabObj.addTab(items);
+  //tabObj.select(1)
+  //drawingHideSpinner()
 });
 
 </script>
@@ -94,9 +114,17 @@ onMounted(async () => {
 .e-ribbon.e-rbn .e-ribbon-tab .e-tab-header .e-indicator {
   background: #0074cc;
 }
+
 </style>
 
+
 <style scoped>
+#parent{
+height: 100%;
+width:100%;
+background-color: black;
+}
+
 .ribbonTemplate {
   display: flex;
   align-items: center;

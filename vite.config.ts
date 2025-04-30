@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "path";
 import viteCompression from 'vite-plugin-compression';
+import mkcert from "vite-plugin-mkcert";
 // https://vitejs.dev/config/
 export default defineConfig({
   //base: "/SyncfusionRibbonDemo/",
@@ -17,13 +18,14 @@ export default defineConfig({
       }
     }
   }),
+
   viteCompression({
     algorithm: 'brotliCompress'
 
 
   }),
-
-
+  mkcert(),
+  
   ],
   resolve: {
     alias: [

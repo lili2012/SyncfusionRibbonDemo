@@ -39,6 +39,7 @@
     "vite": "^6.2.5",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-mkcert": "^1.17.8",
     "vue-tsc": "^2.2.8"
   }
 }

@@ -35,7 +35,7 @@ onMounted(async () => {
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
 
-  const db = await FetchDrawing(props.url + '.pb')
+  const db = await FetchDrawing(props.url + '.pb.br')
   if (!db)
     return
   const sgdb = new SGDb()

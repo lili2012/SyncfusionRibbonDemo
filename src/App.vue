@@ -130,7 +130,7 @@ const removing = (args: RemoveEventArgs)=>{
 
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
-const url = "http://192.168.1.100:3000/"
+const url = "/dwg/"
 const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
 const addNewPage = ()=>{
   const tabObj = TabInstance.value!.ej2Instances;

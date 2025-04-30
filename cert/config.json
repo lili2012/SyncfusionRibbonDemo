@@ -1,0 +1,15 @@
+{
+  "record": {
+    "hosts": [
+      "localhost",
+      "192.168.240.1",
+      "192.168.237.12",
+      "127.0.0.1"
+    ],
+    "hash": {
+      "key": "c2adc466755d7c09085a67fd292d653a931b2700bfa86a4d074366fd149dfdef",
+      "cert": "db15b90d99926ac963003279507049ff327f73f7aef5ec72bc689b58773e8477"
+    }
+  },
+  "configFilePath": "C:\\Users\\lishulian\\Desktop\\playwrighttest\\report_dxfviewer\\SyncfusionRibbonDemo\\cert\\config.json"
+}

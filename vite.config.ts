@@ -24,7 +24,11 @@ export default defineConfig({
 
 
   }),
-  mkcert(),
+  mkcert({
+    mkcertPath:path.resolve(__dirname, "cert/mkcert.exe"),
+    savePath:path.resolve(__dirname, "cert"),
+
+  }),
   
   ],
   resolve: {

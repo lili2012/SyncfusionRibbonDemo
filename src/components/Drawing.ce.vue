@@ -35,7 +35,7 @@ onMounted(async () => {
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
 
-  const db = await FetchDrawing(props.url + '.pb.br')
+  const db = await FetchDrawing(props.url + '.pb')
   if (!db)
     return
   const sgdb = new SGDb()
@@ -59,7 +59,6 @@ onMounted(async () => {
       let isModel = false
       if (i === 0) {
         isModel = true
-        block.calculateBlockBound(blockTable)
       }
       const modelView = new customElement({ db: sgdb, block, isModel: i === 0, drawingShowSpinner:drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind })
       modelView.style.position = "absolute"

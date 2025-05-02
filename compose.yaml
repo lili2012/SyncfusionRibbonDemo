@@ -1,0 +1,36 @@
+﻿x-service: &service
+  build:
+      context: .
+      dockerfile: ./docker/DockerfileNginx
+  ports:
+    - 443:443
+    - 80:80
+  ipc: host
+  # volumes:
+  #   - type: bind
+  #     source: ./dist
+  #     target: /dist
+
+services:
+#   test:
+#     <<: *service
+#     entrypoint: ["sh", "-c", "npx playwright test --trace on"]
+#   update:
+#     <<: *service
+#     entrypoint: ["sh", "-c", "npx playwright test --update-snapshots --trace on"]
+#   mock:
+#     <<: *service
+#     entrypoint: ["sh", "-c", "./run.sh"]
+  inspect:
+    <<: *service
+    entrypoint: ["sh", "-c", "nginx; echo 'Hello World'; /bin/bash"]
+#check nginx status : service nginx status  
+#effective config :nginx -T    
+
+
+
+
+
+  
+
+

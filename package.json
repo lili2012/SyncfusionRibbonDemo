@@ -9,7 +9,7 @@
     "preview": "vite preview --host",
     "//https://mkay11.medium.com/how-to-deploy-your-vite-vue-3-application-in-github-pages-2023-2b842f50576a": "",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "docker": "docker compose run --service-ports inspect --rm --it "
   },
   "dependencies": {
     "@syncfusion/ej2-base": "29.1.33",
@@ -39,6 +39,7 @@
     "vite": "^6.2.5",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-compression2": "^1.3.3",
     "vite-plugin-mkcert": "^1.17.8",
     "vue-tsc": "^2.2.8"
   }

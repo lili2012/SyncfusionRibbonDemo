@@ -9,6 +9,6 @@ const DrawingComponent = defineCustomElement(Drawing, { shadowRoot: true })
 const ViewComponent = defineCustomElement(View, { shadowRoot: false })
 customElements.define('drawing-page', DrawingComponent)
 customElements.define('view-page', ViewComponent)
-registerLicense('Ngo9BigBOggjHTQxAR8/V1NNaF5cXmZCe0xwWmFZfVtgdVRMYllbRn9PIiBoS35Rc0VnWXhedHVVRmFdVUZ+VEBU');
+registerLicense('ORg4AjUWIQA/Gnt2XFhhQlJHfVldW3xLflFzVWJTell6d11WESFaRnZdR11mSXlTd0BrWHxfeXxRTWJV');
                 
 createApp(App).mount('#app')

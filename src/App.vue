@@ -65,12 +65,6 @@ import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem,SelectEventArgs,RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 
-import mainFont from "@/assets/fonts/Roboto-LightItalic.ttf"
-import aux1Font from "@/assets/fonts/NotoSansDisplay-SemiCondensedLightItalic.ttf"
-import aux2Font from "@/assets/fonts/HanaMinA.ttf"
-import aux3Font from "@/assets/fonts/NanumGothic-Regular.ttf"
-const fonts = [mainFont, aux1Font, aux2Font, aux3Font]
-console.log(typeof fonts);
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -132,6 +126,7 @@ let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 const url = "/dwg/"
 const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
+//const drawings = [ "draworder1.dxf","draworder2.dxf"]
 const addNewPage = ()=>{
   const tabObj = TabInstance.value!.ej2Instances;
     //https://github.com/vuejs/core/pull/11517
@@ -143,7 +138,7 @@ const addNewPage = ()=>{
     if (customElement) {
       const drawingName = drawings[ (drawingNumber-1) % 2 ]
       const drawingUrl = url + drawingName
-      const shadowElement = new customElement({url: drawingUrl, fonts})
+      const shadowElement = new customElement({url: drawingUrl})
       
      //https://stackoverflow.com/questions/9519841/why-does-this-css-margin-top-style-not-work/9519933#9519933
       //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/

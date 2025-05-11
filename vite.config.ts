@@ -20,23 +20,31 @@ export default defineConfig({
       }
     }
   }),
-//     compression({
-//       algorithm: 'brotliCompress',
-//       include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-//       compressionOptions: { params: {
-//         [zlib.constants.BROTLI_PARAM_QUALITY]:
-// zlib.constants.BROTLI_MAX_QUALITY,
-//         [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
-//     }, }
-//     }),
-    // compression({
-    //   algorithm: 'gzip',
-    //   include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-    //   compressionOptions: {
-    //     level: zlib.constants.Z_BEST_COMPRESSION,
-    //     strategy: zlib.constants.Z_DEFAULT_STRATEGY,
-    // },
-    // }),
+  {
+    name: "Cleaning assets folder",
+    async buildStart() {
+      fs.rmSync(path.resolve(__dirname, './dist/assets'), { recursive: true, force: true });
+    }
+  },
+  // compression({
+  //   algorithm: 'brotliCompress',
+  //   include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
+  //   compressionOptions: {
+  //     params: {
+  //       [zlib.constants.BROTLI_PARAM_QUALITY]:
+  //         zlib.constants.BROTLI_MAX_QUALITY,
+  //       [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
+  //     },
+  //   }
+  // }),
+  // compression({
+  //   algorithm: 'gzip',
+  //   include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
+  //   compressionOptions: {
+  //     level: zlib.constants.Z_BEST_COMPRESSION,
+  //     strategy: zlib.constants.Z_DEFAULT_STRATEGY,
+  //   },
+  // }),
     // mkcert({
     //   mkcertPath: path.resolve(__dirname, "cert/mkcert.exe"),
     //   savePath: path.resolve(__dirname, "cert"),
@@ -49,6 +57,7 @@ export default defineConfig({
     ],
   },
   build: {
+    
     target: "esnext",
     minify: 'terser',
     sourcemap: true,
@@ -64,7 +73,7 @@ export default defineConfig({
       toplevel: true,
 
     },
-    emptyOutDir: true,
+    emptyOutDir: false,
     chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {

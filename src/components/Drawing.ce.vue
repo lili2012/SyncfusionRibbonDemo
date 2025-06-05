@@ -8,7 +8,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   url: string,
-  fonts: string[]
 }>()
 
 import { TabComponent as EjsTab } from "@syncfusion/ej2-vue-navigations";
@@ -39,6 +38,7 @@ onMounted(async () => {
   if (!db)
     return
   const sgdb = new SGDb()
+  SGDb.setCurrentDb(sgdb)
   sgdb.populate(db)
   const textRenderer = new TextRenderer
   await textRenderer.init(db.textStyles);

@@ -21,7 +21,8 @@ import { useTemplateRef, onMounted, onBeforeMount} from "vue";
 
 
 function onVisible() {
-  //Viewport.Render()
+  //SGDb.setCurrentSpace(props.block)
+  
 }
 
 function onHide() {

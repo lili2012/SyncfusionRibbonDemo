@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="canvasContainer" ref="canvasContainer">
+  <div class="canvasContainer" ref="canvasContainer" style="width:100%;height:100%;color:black;">
 
   </div>
 </template>
@@ -66,9 +66,5 @@ onMounted(async () => {
 
 </script>
 <style scoped>
-div {
-  color: black;
-  width: 100%;
-  height: 100%;
-}
+
 </style>

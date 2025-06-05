@@ -1,7 +1,7 @@
 <template>
   <div id="parent" ref='ParentInstance'>
   <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Scrollable'
-    headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false >
+    headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false :selected='selected' >
   </ejs-tab>
 </div>
 </template>
@@ -10,11 +10,13 @@ const props = defineProps<{
   url: string,
 }>()
 
-import { TabComponent as EjsTab } from "@syncfusion/ej2-vue-navigations";
+import { TabComponent as EjsTab,SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "./FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
 import { SGDb, TextRenderer, Layout } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
+import { createApp,h } from 'vue'
+import View from './View.vue';
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 function drawingShowSpinner (){
@@ -45,9 +47,8 @@ onMounted(async () => {
   const blockTable = sgdb.blockTable
 
   const layouts: Layout[] = db.layouts
-  const customElement = customElements.get('view-page')
-  if (!customElement)
-    return
+
+
   const n = layouts.length
   const items = []
   for (let i = 0; i < n; i++) {
@@ -60,11 +61,12 @@ onMounted(async () => {
       if (i === 0) {
         isModel = true
       }
-      const modelView = new customElement({ db: sgdb, block, isModel: i === 0, drawingShowSpinner:drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind })
-      modelView.style.position = "absolute"
-      modelView.style.width = "100%"
-      modelView.style.height = "100%"
-      const item = { header: { text: name }, content: modelView };
+      const viewContainer = document.createElement('div');
+      // Store the props and component info without mounting
+      viewContainer.dataset.pendingMount = 'true';
+      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner:drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
+
+      const item = { header: { text: name }, content: viewContainer };
       items.push(item)
     }
   }
@@ -73,7 +75,28 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
-
+const selected = (args: SelectEventArgs)=> {
+      // When a tab is selected, check if it has pending components to mount
+      setTimeout(() => {
+        const selectedContent = args.selectedContent;
+        if (selectedContent) {
+          const pendingElements = selectedContent.querySelectorAll('[data-pending-mount="true"]');
+          pendingElements.forEach(element => {
+            if (element._mountProps) {
+              // Now mount the component when the tab is visible
+              const app = createApp({
+                render() {
+                  return h(View, element._mountProps);
+                }
+              });
+              app.mount(element);
+              // Clear the pending flag
+              element.dataset.pendingMount = 'false';
+            }
+          });
+        }
+      }, 0);
+    }
 </script>
 
 <style>

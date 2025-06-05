@@ -15,7 +15,7 @@ export default defineConfig({
     template: {
       compilerOptions: {
         isCustomElement: (tag) => {
-          return tag === 'drawing' || tag === 'view'
+          return tag === 'drawing'
         }
       }
     }

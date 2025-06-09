@@ -1,28 +1,35 @@
 <template>
   <div id="parent" ref='ParentInstance'>
-  <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill" overflowMode='Scrollable'
-    headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false :selected='selected' >
-  </ejs-tab>
-</div>
+    <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill"
+      overflowMode='Scrollable' headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false :selected='selected'>
+    </ejs-tab>
+    <!-- <Teleport to=".e-tab .e-content > .e-item.e-active">
+      <div class="modal">
+        <p>Hello from the modal!</p>
+        <button>Close</button>
+      </div>
+    </Teleport> -->
+  </div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
   url: string,
 }>()
 
-import { TabComponent as EjsTab,SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "./FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
 import { SGDb, TextRenderer, Layout } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
-import { createApp,h } from 'vue'
+import { createApp, h } from 'vue'
+
 import View from './View.vue';
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
-function drawingShowSpinner (){
+function drawingShowSpinner() {
   showSpinner(this!);
 }
-function drawingHideSpinner(){
+function drawingHideSpinner() {
   hideSpinner(this!);
 }
 onMounted(async () => {
@@ -62,9 +69,15 @@ onMounted(async () => {
         isModel = true
       }
       const viewContainer = document.createElement('div');
+      viewContainer.style.position = 'absolute'
+      viewContainer.style.top = '0'
+      viewContainer.style.bottom = '0'
+      viewContainer.style.left = '0'
+      viewContainer.style.right = '0'
+      viewContainer.style.display = 'flex'
       // Store the props and component info without mounting
       viewContainer.dataset.pendingMount = 'true';
-      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner:drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
+      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
 
       const item = { header: { text: name }, content: viewContainer };
       items.push(item)
@@ -75,28 +88,28 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
-const selected = (args: SelectEventArgs)=> {
-      // When a tab is selected, check if it has pending components to mount
-      setTimeout(() => {
-        const selectedContent = args.selectedContent;
-        if (selectedContent) {
-          const pendingElements = selectedContent.querySelectorAll('[data-pending-mount="true"]');
-          pendingElements.forEach(element => {
-            if (element._mountProps) {
-              // Now mount the component when the tab is visible
-              const app = createApp({
-                render() {
-                  return h(View, element._mountProps);
-                }
-              });
-              app.mount(element);
-              // Clear the pending flag
-              element.dataset.pendingMount = 'false';
+const selected = (args: SelectEventArgs) => {
+  // When a tab is selected, check if it has pending components to mount
+  setTimeout(() => {
+    const selectedContent = args.selectedContent;
+    if (selectedContent) {
+      const pendingElements = selectedContent.querySelectorAll('[data-pending-mount="true"]');
+      pendingElements.forEach(element => {
+        if (element._mountProps) {
+          // Now mount the component when the tab is visible
+          const app = createApp({
+            render() {
+              return h(View, element._mountProps);
             }
           });
+          app.mount(element);
+          // Clear the pending flag
+          element.dataset.pendingMount = 'false';
         }
-      }, 0);
+      });
     }
+  }, 0);
+}
 </script>
 
 <style>
@@ -136,15 +149,14 @@ const selected = (args: SelectEventArgs)=> {
 .e-ribbon.e-rbn .e-ribbon-tab .e-tab-header .e-indicator {
   background: #0074cc;
 }
-
 </style>
 
 
 <style scoped>
-#parent{
-height: 100%;
-width:100%;
-background-color: black;
+#parent {
+  height: 100%;
+  width: 100%;
+  background-color: black;
 }
 
 .ribbonTemplate {

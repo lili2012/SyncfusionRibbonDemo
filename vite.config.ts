@@ -9,7 +9,7 @@ import zlib from "zlib";
 export default defineConfig({
   //base: "/SyncfusionRibbonDemo/",
   server: {
-    port: 5173,
+    port: 5175,
   },
   plugins: [vue({
     template: {

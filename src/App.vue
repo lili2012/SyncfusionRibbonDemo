@@ -211,8 +211,8 @@ let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 const url = "/dwg/"
 //const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
-//const drawings = [ "draworder1.dxf","draworder2.dxf"]
-const drawings = ["Drawing4.dxf"]
+const drawings = [ "draworder1.dxf","draworder2.dxf"]
+//const drawings = ["Drawing4.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
 const addNewPage = () => {
   const tabObj = TabInstance.value!.ej2Instances;
@@ -340,11 +340,11 @@ const content2 = `肥西核电站立面详图是对核电站建筑外立面细�
   content: '\e823';
 }
 
-.header {
+/* .header {
   flex: 0 1 auto;
 }
 
 .content {
   flex: 1 1 auto;
-}
+} */
 </style>

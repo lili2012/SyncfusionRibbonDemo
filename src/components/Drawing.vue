@@ -21,8 +21,8 @@ import { FetchDrawing } from "./FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
 import { SGDb, TextRenderer, Layout } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
-import { createApp, h } from 'vue'
-
+import { createApp, h, createVNode, render } from 'vue'
+import CommandLine from './CommandLine.vue';
 import View from './View.vue';
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
@@ -54,7 +54,7 @@ onMounted(async () => {
   const blockTable = sgdb.blockTable
 
   const layouts: Layout[] = db.layouts
-
+  const commandline = createVNode(CommandLine)
 
   const n = layouts.length
   const items = []
@@ -77,7 +77,7 @@ onMounted(async () => {
       viewContainer.style.display = 'flex'
       // Store the props and component info without mounting
       viewContainer.dataset.pendingMount = 'true';
-      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
+      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind, commandline };
 
       const item = { header: { text: name }, content: viewContainer };
       items.push(item)
@@ -97,12 +97,10 @@ const selected = (args: SelectEventArgs) => {
       pendingElements.forEach(element => {
         if (element._mountProps) {
           // Now mount the component when the tab is visible
-          const app = createApp({
-            render() {
-              return h(View, element._mountProps);
-            }
-          });
-          app.mount(element);
+          const view = createVNode(View, element._mountProps)
+
+          render(view, element)
+
           // Clear the pending flag
           element.dataset.pendingMount = 'false';
         }

@@ -92,11 +92,12 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, onMounted, } from "vue";
+import { provide, useTemplateRef, onMounted, createVNode, render } from "vue";
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
+import Drawing from "./components/Drawing.vue"
 import OpenAI from "openai";
 const client = new OpenAI({
   baseURL: 'https://api.deepseek.com',
@@ -105,34 +106,34 @@ const client = new OpenAI({
 });
 type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 type Tool = OpenAI.Chat.Completions.ChatCompletionTool;
-const aitools:Tool[] = [
-    {
-        type: "function",
-        function: {
-            name: "get_weather",
-            description: "Get weather of an location, the user shoud supply a location first",
-            parameters: {
-                type: "object",
-                properties: {
-                    location: {
-                        type: "string",
-                        description: "The city and state, e.g. San Francisco, CA",
-                    }
-                },
-                required: ["location"]
-            },
-        }
-    },
+const aitools: Tool[] = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get weather of an location, the user shoud supply a location first",
+      parameters: {
+        type: "object",
+        properties: {
+          location: {
+            type: "string",
+            description: "The city and state, e.g. San Francisco, CA",
+          }
+        },
+        required: ["location"]
+      },
+    }
+  },
 ]
 
-async function send_messages(){
-  const messages:Message[] = [{role: "user", content: "How's the weather in Hangzhou?"}]
-    const response = await client.chat.completions.create({
-      model:"deepseek-chat",
-      messages,
-      tools:aitools
-    })
-    return response
+async function send_messages() {
+  const messages: Message[] = [{ role: "user", content: "How's the weather in Hangzhou?" }]
+  const response = await client.chat.completions.create({
+    model: "deepseek-chat",
+    messages,
+    tools: aitools
+  })
+  return response
 }
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
@@ -195,6 +196,20 @@ const selected = (args: SelectEventArgs) => {
     //   previousItem.content.onHide()
     // }
   }
+  setTimeout(() => {
+    const selectedContent = args.selectedContent;
+    if (selectedContent) {
+      const pendingElements = selectedContent.querySelectorAll('[data-pending-mount="true"]');
+      pendingElements.forEach(element => {
+        if (element._mountProps) {
+          const drawing = createVNode(Drawing, element._mountProps)
+          render(drawing, element)
+          // Clear the pending flag
+          element.dataset.pendingMount = 'false';
+        }
+      });
+    }
+  }, 0);
 }
 
 const removing = (args: RemoveEventArgs) => {
@@ -211,37 +226,33 @@ let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 const url = "/dwg/"
 //const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
-const drawings = [ "draworder1.dxf","draworder2.dxf"]
-//const drawings = ["Drawing4.dxf"]
+//const drawings = [ "draworder1.dxf","draworder2.dxf"]
+const drawings = ["Drawing4.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
 const addNewPage = () => {
   const tabObj = TabInstance.value!.ej2Instances;
-  //https://github.com/vuejs/core/pull/11517
-  //https://github.com/ElMassimo/vue-custom-element-example
-  //https://github.com/vuejs/core/issues/4662
-  //https://github.com/EranGrin/vue-web-component-wrapper?tab=readme-ov-file
 
-  const customElement = customElements.get('drawing-page')
-  if (customElement) {
-    const drawingName = drawings[(drawingNumber - 1) % 2]
-    const drawingUrl = url + drawingName
-    const shadowElement = new customElement({ url: drawingUrl })
+  const drawingName = drawings[(drawingNumber - 1) % 2]
+  const drawingUrl = url + drawingName
 
-    //https://stackoverflow.com/questions/9519841/why-does-this-css-margin-top-style-not-work/9519933#9519933
-    //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/
-    //shadowElement.style.overflow ="hidden"
-    shadowElement.style.position = "absolute"
-    shadowElement.style.width = "100%"
-    shadowElement.style.height = "100%"
+  const drawingContainer = document.createElement('div');
 
-    drawingNumber = drawingNumber + 1
-    const item = { header: { text: drawingName }, content: shadowElement };
-    const existItems = document.querySelectorAll('#tab .e-toolbar-item')
-    const insertIndex = existItems.length - 1;
-    tabObj.addTab([item], insertIndex);
-    tabObj.selectedItem = insertIndex
-    //tabObj.select(insertIndex)
-  }
+  //https://stackoverflow.com/questions/9519841/why-does-this-css-margin-top-style-not-work/9519933#9519933
+  //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/
+  //shadowElement.style.overflow ="hidden"
+  drawingContainer.style.position = "absolute"
+  drawingContainer.style.width = "100%"
+  drawingContainer.style.height = "100%"
+  drawingContainer.dataset.pendingMount = 'true';
+  drawingContainer._mountProps = { url: drawingUrl };
+  drawingNumber = drawingNumber + 1
+  const item = { header: { text: drawingName }, content: drawingContainer };
+  const existItems = document.querySelectorAll('#tab .e-toolbar-item')
+  const insertIndex = existItems.length - 1;
+  tabObj.addTab([item], insertIndex);
+  tabObj.selectedItem = insertIndex
+  //tabObj.select(insertIndex)
+  // }
 }
 
 const deleteEntities = {

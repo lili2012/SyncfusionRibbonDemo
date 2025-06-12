@@ -12,7 +12,6 @@ const props = defineProps<{
   isModel: true,
   drawingShowSpinner: () => void,
   drawingHideSpinner: () => void,
-  commandline : App<Element>
 }>()
 
 import { SGDb, Viewport, SGBlock } from "sgcad"
@@ -53,7 +52,7 @@ onMounted(async () => {
     props.drawingShowSpinner()
   }
   setTimeout(showView, 0)
-  render(props.commandline, container.value!)
+
 
 })
 

@@ -54,7 +54,7 @@ onMounted(async () => {
   const blockTable = sgdb.blockTable
 
   const layouts: Layout[] = db.layouts
-  const commandline = createVNode(CommandLine)
+
 
   const n = layouts.length
   const items = []
@@ -77,7 +77,7 @@ onMounted(async () => {
       viewContainer.style.display = 'flex'
       // Store the props and component info without mounting
       viewContainer.dataset.pendingMount = 'true';
-      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind, commandline };
+      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
 
       const item = { header: { text: name }, content: viewContainer };
       items.push(item)
@@ -100,11 +100,23 @@ const selected = (args: SelectEventArgs) => {
           const view = createVNode(View, element._mountProps)
 
           render(view, element)
-
           // Clear the pending flag
           element.dataset.pendingMount = 'false';
+          const child = element.firstChild as HTMLElement
+          if (child) {
+            if (!args.isInteracted) {
+              const commandline = createVNode(CommandLine)
+              render(commandline, child)
+            }
+          }
         }
       });
+
+      const content = selectedContent.parentElement!
+      const commandline = content.querySelectorAll('#commandlineContainer').item(0)
+      const child = selectedContent.firstChild?.firstChild as HTMLElement
+      child.append(commandline)
+
     }
   }, 0);
 }

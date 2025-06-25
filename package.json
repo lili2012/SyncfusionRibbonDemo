@@ -25,24 +25,24 @@
     "@syncfusion/ej2-vue-ribbon": "29.2.4",
     "@syncfusion/ej2-vue-schedule": "29.2.4",
     "@syncfusion/ej2-vue-splitbuttons": "29.2.4",
-    "openai": "^5.1.0",
+    "openai": "^5.7.0",
     "pinia": "^3.0.3",
-    "protobufjs": "^7.5.3",
     "sgcad": "workspace:*",
     "three": "workspace:*",
-    "vue": "^3.5.16"
+    "vue": "^3.5.17"
   },
   "devDependencies": {
     "@types/three": "^0.161.2",
     "@vitejs/plugin-vue": "^5.2.4",
     "gh-pages": "^6.3.0",
-    "terser": "^5.40.0",
+    "terser": "^5.43.1",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "vite": "latest",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-compression2": "^1.4.0",
     "vite-plugin-mkcert": "^1.17.8",
+    "vite-plugin-require": "^1.2.14",
     "vue-tsc": "^2.2.10"
   }
 }

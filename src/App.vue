@@ -224,16 +224,19 @@ const removing = (args: RemoveEventArgs) => {
 
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
-const url = "/dwg/"
+//const url = "/dwg/"
 //const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
-//const drawings = [ "draworder1.dxf","draworder2.dxf"]
-const drawings = ["Drawing4.dxf"]
+const drawings = [ "draworder1.dxf","draworder2.dxf"]
+//const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
+
+
 const addNewPage = () => {
   const tabObj = TabInstance.value!.ej2Instances;
 
   const drawingName = drawings[(drawingNumber - 1) % 2]
-  const drawingUrl = url + drawingName
+
+  //const drawingUrl = url + drawingName
 
   const drawingContainer = document.createElement('div');
 
@@ -244,7 +247,7 @@ const addNewPage = () => {
   drawingContainer.style.width = "100%"
   drawingContainer.style.height = "100%"
   drawingContainer.dataset.pendingMount = 'true';
-  drawingContainer._mountProps = { url: drawingUrl };
+  drawingContainer._mountProps = { drawingName };
   drawingNumber = drawingNumber + 1
   const item = { header: { text: drawingName }, content: drawingContainer };
   const existItems = document.querySelectorAll('#tab .e-toolbar-item')

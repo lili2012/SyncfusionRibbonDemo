@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  url: string,
+  drawingName: string,
 }>()
 
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
@@ -24,6 +24,7 @@ import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-pop
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
+import { useUserStore } from "sgcad";
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 function drawingShowSpinner() {
@@ -31,6 +32,17 @@ function drawingShowSpinner() {
 }
 function drawingHideSpinner() {
   hideSpinner(this!);
+}
+async function waitUntil(condition, timeout = 1000) {
+  const time = 100
+  let acumulateTime = 0
+  while (!condition()) {
+    await new Promise((resolve) => setTimeout(resolve, time));
+    acumulateTime += time
+    if(acumulateTime >= timeout){
+      return;
+    }
+  }
 }
 onMounted(async () => {
   createSpinner({
@@ -42,8 +54,10 @@ onMounted(async () => {
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
+  const userStore = useUserStore()
+  await waitUntil(() => userStore.user !== "");
+  const db = await FetchDrawing(`/dwg/${userStore.user}/${props.drawingName}.pb`)
 
-  const db = await FetchDrawing(props.url + '.pb')
   if (!db)
     return
   const sgdb = new SGDb()

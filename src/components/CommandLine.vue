@@ -1,5 +1,5 @@
 ﻿<template>
-  <div id="commandlineContainer" :class="$style.container" ref="commandlineContainer" @mouseenter="onMouseenter"
+  <div id="commandlineContainer" :class="$style.container" ref="commandlineContainer" @mouseenter="onMouseenter" @mousemove="onMouseMove"
     @mouseleave="onMouseleave" @mousedown="OnMouseDown" @mouseup="OnMouseUp">
     <div class="header" ref="header"
       style="height: 100%;width: 40px;cursor: move;display: flex;flex-direction: column;align-items: center;">
@@ -11,14 +11,14 @@
       </svg>
     </div>
     <div style="display: flex;flex-direction: column; flex-grow: 1;">
-      <textarea readonly v-model=commandLineStore.log
+      <textarea ref="logArea" readonly v-model=commandLineStore.log
         style="top:0px;padding: 0px;border: 0px;flex-grow: 1;background-color: #cccccc;min-height: 0px;"></textarea>
-      <div style="flex: 0 0 40px;display: flex;flex-direction: row;">
-        <span style="font-weight: 450;white-space: pre-wrap;">{{ commandLineStore.command.description?.length ?
+      <div style="flex: 0 0 30px;display: flex;flex-direction: row;">
+        <span style="font-weight: 550;white-space: pre-wrap;">{{ commandLineStore.command.description?.length ?
           commandLineStore.command.description + " " : "" }}</span>
         <span style="font-weight: light;">{{ commandLineStore.prompt.description }}</span>
-        <input class="commandinput" v-model="currInput"
-          style="font-size:16pt;padding: 0px;border: 0px; height:40px;flex-grow: 1;" @keypress="onKeyPress"></input>
+        <input ref="inputArea" class="commandinput" v-model="currInput"
+          style="font-size:16pt;padding: 0px;border: 0px; height:30px;flex-grow: 1;" @keypress="onKeyPress"></input>
       </div>
 
     </div>
@@ -35,6 +35,7 @@ import { useCommandLineStore, CommandStack, drawLineByTwoPoint } from "sgcad"
 import OpenAI from "openai";
 
 import { Vector3 } from "three";
+import { styleText } from "util";
 const client = new OpenAI({
   //apiKey: 'ragflow-M2ZjJjODg2NTBjODExZjA4MTQ5MzJlOT',
   //baseURL: 'http://localhost:80/api/v1/chats_openai/35af8aca50d811f080c532e95cee60b0',
@@ -100,12 +101,31 @@ async function send_messages(message: string) {
 const commandLineStore = useCommandLineStore()
 const commandlineContainer = useTemplateRef('commandlineContainer')
 const header = useTemplateRef('header')
+const logArea = useTemplateRef('logArea')
+const inputArea = useTemplateRef('inputArea')
 
 const currInput = ref("")
 let posX: number | undefined
 let posY: number | undefined
 const onMouseenter = (e: MouseEvent) => {
-  commandlineContainer.value!.style.opacity = "1"
+  const containerElement = commandlineContainer.value!
+  containerElement.style.opacity = "1"
+}
+const onMouseMove = (e: MouseEvent) =>{
+  const containerElement = commandlineContainer.value!
+  containerElement.style.opacity = "1"
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+  posX = e.clientX - rect.left;
+  posY = e.clientY - rect.top;
+  const headerEle = header.value!
+  const headerRect = headerEle.getBoundingClientRect();
+  if (posX > headerRect.width && posY < 5) {
+    logArea.value!.style.cursor = "ns-resize"
+    inputArea.value!.style.cursor = "ns-resize"
+  }else{
+    logArea.value!.style.cursor = ""
+    inputArea.value!.style.cursor = ""
+  }
 }
 const onMouseleave = (e: MouseEvent) => {
   commandlineContainer.value!.style.opacity = "0.8"
@@ -117,10 +137,12 @@ const OnMouseDown = (e: MouseEvent) => {
   posY = e.clientY - rect.top;
   const headerEle = header.value!
   const headerRect = headerEle.getBoundingClientRect();
-  const parent = commandlineContainer.value!.parentElement!
+  const containerElement = commandlineContainer.value!
+  const parent = containerElement.parentElement!
   if (posX <= headerRect.width && posY <= headerRect.height) {
     parent.addEventListener("mousemove", dragging)
   } else if (posY < 5) {
+    
     parent.addEventListener("mousemove", resizing)
   }
 }
@@ -193,8 +215,8 @@ const resizing = (e: MouseEvent) => {
     const heightOffset = ele.offsetTop - offsetY
     const height = ele.clientHeight
     let newHeight = (height + heightOffset)
-    if (newHeight < 40) {
-      newHeight = 40
+    if (newHeight < 30) {
+      newHeight = 30
     }
     ele.style.height = newHeight + "px";
   }
@@ -255,7 +277,7 @@ const dragging = (e: MouseEvent) => {
   position: absolute;
   bottom: 10px;
   left: 25px;
-  height: 40px;
+  height: 30px;
   width: calc(100% - 50px);
   background-color: whitesmoke;
   display: flex;

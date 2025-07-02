@@ -33,7 +33,7 @@ function drawingShowSpinner() {
 function drawingHideSpinner() {
   hideSpinner(this!);
 }
-async function waitUntil(condition, timeout = 1000) {
+async function waitUntil(condition:()=>boolean, timeout = 1000) {
   const time = 100
   let acumulateTime = 0
   while (!condition()) {

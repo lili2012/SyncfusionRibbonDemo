@@ -161,7 +161,7 @@ const test1 = {
     call1()
   }
 };
-const polylineButton = { iconCss: "e-icons e-perimeter", content: "Polyline" };
+const polylineButton = { iconCss: "e-icons e-perimeter", content: "Polyline",  clicked: () => CommandStack.execute("polyline")};
 const circleButton = { iconCss: "e-icons e-circle", content: "Circle" };
 const arcButton = { iconCss: "e-icons e-radius", content: "Arc" };
 const rectangleButton = { iconCss: "e-icons e-frame-5", content: "Rectangle" };
@@ -226,10 +226,11 @@ let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 //const url = "/dwg/"
 //const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
-const drawings = [ "draworder1.dxf","draworder2.dxf"]
+//const drawings = [ "draworder1.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
-
+const drawings = [ "Drawing4_1.dxf","Drawing4.dxf"]
+//const drawings = [ "text1.dxf","Drawing4.dxf"]
 
 const addNewPage = () => {
   const tabObj = TabInstance.value!.ej2Instances;
@@ -250,11 +251,11 @@ const addNewPage = () => {
   drawingContainer._mountProps = { drawingName };
   drawingNumber = drawingNumber + 1
   const item = { header: { text: drawingName }, content: drawingContainer };
-  const existItems = document.querySelectorAll('#tab .e-toolbar-item')
+  const existItems = tabObj.items
   const insertIndex = existItems.length - 1;
   tabObj.addTab([item], insertIndex);
-  tabObj.selectedItem = insertIndex
-  //tabObj.select(insertIndex)
+  //tabObj.selectedItem = insertIndex
+  tabObj.select(insertIndex)
   // }
 }
 

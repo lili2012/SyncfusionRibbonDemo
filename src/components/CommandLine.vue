@@ -35,7 +35,7 @@ import { useCommandLineStore, CommandStack, drawLineByTwoPoint } from "sgcad"
 import OpenAI from "openai";
 
 import { Vector3 } from "three";
-import { styleText } from "util";
+
 const client = new OpenAI({
   //apiKey: 'ragflow-M2ZjJjODg2NTBjODExZjA4MTQ5MzJlOT',
   //baseURL: 'http://localhost:80/api/v1/chats_openai/35af8aca50d811f080c532e95cee60b0',
@@ -127,6 +127,21 @@ const onMouseMove = (e: MouseEvent) =>{
     inputArea.value!.style.cursor = ""
   }
 }
+const unsubscribe = commandLineStore.$onAction(
+  ({
+    name, // name of the action
+    store, // store instance, same as `someStore`
+    args, // array of parameters passed to the action
+    after, // hook after the action returns or resolves
+    onError, // hook if the action throws or rejects
+  }) => {
+    after((result) => {
+      const textarea = logArea.value!
+      textarea.scrollTop = textarea.scrollHeight;
+    })
+  }
+)
+
 const onMouseleave = (e: MouseEvent) => {
   commandlineContainer.value!.style.opacity = "0.8"
 }

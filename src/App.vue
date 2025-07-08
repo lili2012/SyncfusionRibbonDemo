@@ -229,7 +229,7 @@ let drawingNumber = 1;
 const drawings = [ "draworder1.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
-//const drawings = [ "Drawing4_1.dxf","Drawing4.dxf"]
+//const drawings = [ "text1.dxf","Drawing4.dxf"]
 //const drawings = [ "多行文字测试.dxf","Drawing4.dxf"]
 
 const addNewPage = () => {

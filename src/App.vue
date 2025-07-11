@@ -69,8 +69,7 @@
             <e-ribbon-collections>
               <e-ribbon-collection>
                 <e-ribbon-items>
-                  <e-ribbon-item type="Button" :buttonSettings="test1"
-                    :allowedSizes=RibbonItemSize.Large></e-ribbon-item>
+                  <e-ribbon-item type="Button" :allowedSizes=RibbonItemSize.Large></e-ribbon-item>
                 </e-ribbon-items>
               </e-ribbon-collection>
             </e-ribbon-collections>
@@ -98,43 +97,7 @@ import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as E
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
 import Drawing from "./components/Drawing.vue"
-import OpenAI from "openai";
-const client = new OpenAI({
-  baseURL: 'https://api.deepseek.com',
-  apiKey: 'sk-22b0bd97e5b84ad5aea06194931fce6a',
-  dangerouslyAllowBrowser: true
-});
-type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
-type Tool = OpenAI.Chat.Completions.ChatCompletionTool;
-const aitools: Tool[] = [
-  {
-    type: "function",
-    function: {
-      name: "get_weather",
-      description: "Get weather of an location, the user shoud supply a location first",
-      parameters: {
-        type: "object",
-        properties: {
-          location: {
-            type: "string",
-            description: "The city and state, e.g. San Francisco, CA",
-          }
-        },
-        required: ["location"]
-      },
-    }
-  },
-]
 
-async function send_messages() {
-  const messages: Message[] = [{ role: "user", content: "How's the weather in Hangzhou?" }]
-  const response = await client.chat.completions.create({
-    model: "deepseek-chat",
-    messages,
-    tools: aitools
-  })
-  return response
-}
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -150,17 +113,6 @@ const lineButton = {
   iconCss: "e-icons e-line", content: "Line", clicked: () => CommandStack.execute("line")
 };
 
-const test1 = {
-  iconCss: "e-icons e-line", content: "test", clicked: () => {
-    const call1 = async () => {
-      const response = await send_messages()
-      const func = response.choices[0].message.tool_calls?.at(0)?.function
-      console.log(func?.name)
-      console.log(func?.arguments)
-    }
-    call1()
-  }
-};
 const polylineButton = { iconCss: "e-icons e-perimeter", content: "Polyline",  clicked: () => CommandStack.execute("polyline")};
 const circleButton = { iconCss: "e-icons e-circle", content: "Circle" };
 const arcButton = { iconCss: "e-icons e-radius", content: "Arc" };
@@ -225,8 +177,8 @@ const removing = (args: RemoveEventArgs) => {
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 //const url = "/dwg/"
-//const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
-const drawings = [ "draworder1.dxf","draworder2.dxf"]
+const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
+//const drawings = [ "draworder3.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
 //const drawings = [ "text1.dxf","Drawing4.dxf"]

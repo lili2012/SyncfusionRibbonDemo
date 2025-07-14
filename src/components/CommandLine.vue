@@ -108,8 +108,11 @@ const currInput = ref("")
 let posX: number | undefined
 let posY: number | undefined
 const onMouseenter = (e: MouseEvent) => {
-  const containerElement = commandlineContainer.value!
+  setTimeout(() => {
+      const containerElement = commandlineContainer.value!
   containerElement.style.opacity = "1"
+  }, 0);
+
 }
 const onMouseMove = (e: MouseEvent) =>{
   const containerElement = commandlineContainer.value!
@@ -143,7 +146,10 @@ const unsubscribe = commandLineStore.$onAction(
 )
 
 const onMouseleave = (e: MouseEvent) => {
-  commandlineContainer.value!.style.opacity = "0.8"
+    setTimeout(() => {
+      const containerElement = commandlineContainer.value!
+  containerElement.style.opacity = "0.8"
+  }, 0);
 }
 let isPinned = false
 const OnMouseDown = (e: MouseEvent) => {

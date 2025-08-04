@@ -177,7 +177,7 @@ const removing = (args: RemoveEventArgs) => {
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 //const url = "/dwg/"
-const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf"
+const drawings = [ "Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, "Drawing1.dxf" glow.dxf
 //const drawings = [ "draworder3.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]

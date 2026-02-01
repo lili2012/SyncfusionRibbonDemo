@@ -8,9 +8,12 @@
             "type": "msedge",
             "request": "launch",
             "name": "Launch Edge against localhost",
-            "url": "http://localhost:5173/",
+            "url": "http://localhost:5175/",
             "webRoot": "${workspaceFolder}",
-            "enableContentValidation": false
+            "enableContentValidation": false,
+            "sourceMapPathOverrides": {
+                "SGCAD:/*":"${workspaceFolder}/../SGCAD/*",
+            }
         }
     ]
 }

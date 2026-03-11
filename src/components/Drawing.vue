@@ -19,7 +19,7 @@ const props = defineProps<{
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "./FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
-import { SGDb, TextRenderer, Layout } from "sgcad"
+import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
@@ -63,11 +63,11 @@ onMounted(async () => {
   const sgdb = new SGDb()
   SGDb.setCurrentDb(sgdb)
   sgdb.populate(db)
-  const textRenderer = new TextRenderer
-  await textRenderer.init(db.textStyles);
+
+  await sgdb.textStyleTableTable.waitForFontFiles()
   const blockTable = sgdb.blockTable
 
-  const layouts: Layout[] = db.layouts
+  const layouts: cad.Layout[] = db.layouts
 
 
   const n = layouts.length

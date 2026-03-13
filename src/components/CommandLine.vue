@@ -42,7 +42,7 @@ const client = new OpenAI({
   // apiKey: 'sk-TJMK9IPfAL030epr5dC50cB1Ed4a478f98C20f01E2673e0d',
   // baseURL: 'https://aihubmix.com/v1',
   baseURL: 'https://api.deepseek.com',
-  apiKey: 'sk-22b0bd97e5b84ad5aea06194931fce6a',
+  apiKey: 'sk-8de476d5882f4aca98a143336ae6f4fa',
   //apiKey:"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",
   dangerouslyAllowBrowser: true
 });

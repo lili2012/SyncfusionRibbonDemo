@@ -4,7 +4,7 @@ import { registerLicense } from '@syncfusion/ej2-base';
 import { useSelectionSetStore, useCommandLineStore,useUserStore } from 'sgcad';
 import { createPinia } from 'pinia'
 
-registerLicense('Ngo9BigBOggjGyl/VkR+XU9Ff1RGQmFWfFN0Q3NbdVp4flFHcC0sT3RfQFtjSn5QdkdmWX1WeHBcRGtfUw==');
+registerLicense('Ngo9BigBOggjGyl/VkV+XU9AclRGQmJPYVF2R2VJflR1fV9DY0wgOX1dQl9lSX1ScUVhWXxccXdTQmBXUkc=');
 
 const pinia = createPinia()
 const app = createApp(App)

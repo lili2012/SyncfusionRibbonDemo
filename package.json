@@ -9,6 +9,7 @@
     "preview": "vite preview --host",
     "//https://mkay11.medium.com/how-to-deploy-your-vite-vue-3-application-in-github-pages-2023-2b842f50576a": "",
     "predeploy": "npm run build",
+    "cert": ".\\cert\\mkcert.exe -key-file ./cert/key.pem -cert-file ./cert/cert.pem localhost",
     "docker": "docker compose run --service-ports inspect --rm --it "
   },
   "dependencies": {
@@ -29,20 +30,19 @@
     "pinia": "^3.0.4",
     "sgcad": "workspace:*",
     "three": "workspace:*",
-    "vue": "^3.5.27"
+    "vue": "^3.5.30"
   },
   "devDependencies": {
-    "@types/three": "^0.182.0",
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@types/three": "^0.183.1",
+    "@vitejs/plugin-vue": "^6.0.5",
     "gh-pages": "^6.3.0",
-    "terser": "^5.46.0",
+    "terser": "^5.46.1",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
+    "vite": "^8.0.0",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-compression2": "^2.4.0",
-    "vite-plugin-mkcert": "^1.17.9",
-    "vite-plugin-require": "^1.2.14",
-    "vue-tsc": "^3.2.4"
+    "vite-plugin-compression2": "^2.5.2",
+    "vite-plugin-mkcert": "^1.17.10",
+    "vue-tsc": "^3.2.5"
   }
 }

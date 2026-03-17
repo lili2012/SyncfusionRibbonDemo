@@ -12,6 +12,10 @@ export default defineConfig({
   //base: "/SyncfusionRibbonDemo/",
   server: {
     port: 5175,
+    https: {
+      key: fs.readFileSync('./cert/key.pem'),
+      cert: fs.readFileSync('./cert/cert.pem'),
+    },
     proxy: {
       '/dwg/127.0.0.1/': {
         target: "http://localhost:5175",
@@ -40,29 +44,29 @@ export default defineConfig({
     }
   },
 
-    // compression({
-    //   algorithm: 'brotliCompress',
-    //   include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-    //   compressionOptions: {
-    //     params: {
-    //       [zlib.constants.BROTLI_PARAM_QUALITY]:
-    //         zlib.constants.BROTLI_MAX_QUALITY,
-    //       [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
-    //     },
-    //   }
-    // }),
-    // compression({
-    //   algorithm: 'gzip',
-    //   include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-    //   compressionOptions: {
-    //     level: zlib.constants.Z_BEST_COMPRESSION,
-    //     strategy: zlib.constants.Z_DEFAULT_STRATEGY,
-    //   },
-    // }),
-    // mkcert({
-    //   mkcertPath: path.resolve(__dirname, "cert/mkcert.exe"),
-    //   savePath: path.resolve(__dirname, "cert"),
-    // }),
+  compression({
+    algorithm: 'brotliCompress',
+    include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
+    compressionOptions: {
+      params: {
+        [zlib.constants.BROTLI_PARAM_QUALITY]:
+          zlib.constants.BROTLI_MAX_QUALITY,
+        [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
+      },
+    }
+  }),
+  compression({
+    algorithm: 'gzip',
+    include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
+    compressionOptions: {
+      level: zlib.constants.Z_BEST_COMPRESSION,
+      strategy: zlib.constants.Z_DEFAULT_STRATEGY,
+    },
+  }),
+  // mkcert({
+  //   mkcertPath: path.resolve(__dirname, "cert/mkcert.exe"),
+  //   savePath: path.resolve(__dirname, "cert"),
+  // }),
   ],
   resolve: {
     alias: [
@@ -79,8 +83,8 @@ export default defineConfig({
     terserOptions: {
       format: { comments: false },
       compress: {
-        //unsafe: true,
-        //drop_console: true,
+        unsafe: true,
+        drop_console: true,
         drop_debugger: true,
       },
       ecma: 2020,

@@ -24,7 +24,7 @@ import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-pop
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
-import { useUserStore } from "sgcad";
+//import { useUserStore } from "sgcad";
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 function drawingShowSpinner() {
@@ -54,9 +54,9 @@ onMounted(async () => {
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
-  const userStore = useUserStore()
-  await waitUntil(() => userStore.user !== "");
-  const db = await FetchDrawing(`/dwg/${userStore.user}/${props.drawingName}.pb`)
+  //const userStore = useUserStore()
+  //await waitUntil(() => userStore.user !== "");
+  const db = await FetchDrawing(`/dwg/${props.drawingName}.pb`)
 
   if (!db)
     return

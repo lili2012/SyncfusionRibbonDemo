@@ -3,8 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import path from "path";
 import fs from 'fs';
 //import viteCompression from 'vite-plugin-compression';
-import { compression } from 'vite-plugin-compression2'
-import mkcert from "vite-plugin-mkcert";
+import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from "zlib";
 
 
@@ -43,30 +42,22 @@ export default defineConfig({
       fs.rmSync(path.resolve(__dirname, './dist/assets'), { recursive: true, force: true });
     }
   },
+  // compression({
+  //   threshold: 1024, // 1KB minimum - recommended
+  //   //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
+  //   include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
+  //   exclude: [/\.(png|jpg|jpeg|gif|webp|woff|woff2|dxf|shx|pb)$/],
+  //   algorithms: [ // Production: slower builds, better compression
+  //     defineAlgorithm('gzip', { level: 9 }), // Maximum compression
 
-  compression({
-    algorithm: 'brotliCompress',
-    include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-    compressionOptions: {
-      params: {
-        [zlib.constants.BROTLI_PARAM_QUALITY]:
-          zlib.constants.BROTLI_MAX_QUALITY,
-        [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
-      },
-    }
-  }),
-  compression({
-    algorithm: 'gzip',
-    include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/,
-    compressionOptions: {
-      level: zlib.constants.Z_BEST_COMPRESSION,
-      strategy: zlib.constants.Z_DEFAULT_STRATEGY,
-    },
-  }),
-  // mkcert({
-  //   mkcertPath: path.resolve(__dirname, "cert/mkcert.exe"),
-  //   savePath: path.resolve(__dirname, "cert"),
+  //     // Brotli: quality 10-11 recommended for static assets
+  //     defineAlgorithm('brotliCompress', {
+  //       params: {
+  //         [require('zlib').constants.BROTLI_PARAM_QUALITY]: 11
+  //       }
+  //     })]
   // }),
+
   ],
   resolve: {
     alias: [
@@ -77,21 +68,10 @@ export default defineConfig({
   build: {
 
     target: "esnext",
-    minify: 'terser',
+    minify: true,
     sourcemap: false,
     commonjsOptions: { transformMixedEsModules: true },
-    terserOptions: {
-      format: { comments: false },
-      compress: {
-        unsafe: true,
-        drop_console: true,
-        drop_debugger: true,
-      },
-      ecma: 2020,
-      mangle: true,
-      module: true,
-      toplevel: true,
-    },
+
     emptyOutDir: false,
     chunkSizeWarningLimit: 500,
     rollupOptions: {

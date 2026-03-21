@@ -42,21 +42,21 @@ export default defineConfig({
       fs.rmSync(path.resolve(__dirname, './dist/assets'), { recursive: true, force: true });
     }
   },
-  // compression({
-  //   threshold: 1024, // 1KB minimum - recommended
-  //   //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
-  //   include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
-  //   exclude: [/\.(png|jpg|jpeg|gif|webp|woff|woff2|dxf|shx|pb)$/],
-  //   algorithms: [ // Production: slower builds, better compression
-  //     defineAlgorithm('gzip', { level: 9 }), // Maximum compression
+  compression({
+    threshold: 1024, // 1KB minimum - recommended
+    //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
+    include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
+    exclude: [/\.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2)$/],
+    algorithms: [ // Production: slower builds, better compression
+      defineAlgorithm('gzip', { level: 9 }), // Maximum compression
 
-  //     // Brotli: quality 10-11 recommended for static assets
-  //     defineAlgorithm('brotliCompress', {
-  //       params: {
-  //         [require('zlib').constants.BROTLI_PARAM_QUALITY]: 11
-  //       }
-  //     })]
-  // }),
+      // Brotli: quality 10-11 recommended for static assets
+      defineAlgorithm('brotliCompress', {
+        params: {
+          [require('zlib').constants.BROTLI_PARAM_QUALITY]: 11
+        }
+      })]
+  }),
 
   ],
   resolve: {

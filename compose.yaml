@@ -2,6 +2,7 @@
   build:
       context: .
       dockerfile: ./docker/DockerfileNginx
+  image: crpi-7h3nz7gp0takh1u8.cn-hangzhou.personal.cr.aliyuncs.com/lili2012/webcad:latest
   ports:
     - 443:443
     - 80:80
@@ -23,7 +24,10 @@ services:
 #     entrypoint: ["sh", "-c", "./run.sh"]
   inspect:
     <<: *service
-    entrypoint: ["sh", "-c", "nginx; echo 'Hello World'; /bin/bash"]
+    
+    entrypoint: ["sh", "-c", "nginx; echo 'Hello World';  /bin/bash"]
+  on:
+    <<: *service
 #check nginx status : service nginx status  
 #effective config :nginx -T    
 

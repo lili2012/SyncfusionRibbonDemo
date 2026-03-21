@@ -28,19 +28,16 @@ brotli_types application/atom+xml application/javascript application/json applic
 ADD ./122.51.21.137/cert.pem /cert/
 ADD ./122.51.21.137/key.pem /cert/
 
+ADD ./docker/default.conf /etc/nginx/conf.d/default.conf
+
 # 将dist拆分出多个文件夹可以创建多个layer，有利于缓存
 # ADD ./dist /dist
 
 ADD ./dist/dwg /dist/dwg
 ADD ./dist/font /dist/font
-ADD ./dist/svg /dist/svg
+#ADD ./dist/svg /dist/svg
 ADD ./dist/favicon.ico /dist/favicon.ico
-ADD ./dist/favicon.ico.br /dist/favicon.ico.br
 ADD ./dist/index.html /dist/index.html
-ADD ./dist/index.html.br /dist/index.html.br
-ADD ./dist/index.html.gz /dist/index.html.gz
-
 ADD ./dist/assets /dist/assets
 
-
-ADD ./docker/default.conf /etc/nginx/conf.d/default.conf
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,5 +1,5 @@
 <template>
-  <ejs-ribbon class="header" :fileMenu="fileSettings">
+  <ejs-ribbon class="header" :fileMenu="fileSettings" :activeLayout="activeLayout">
     <e-ribbon-tabs>
       <e-ribbon-tab header="常用">
         <e-ribbon-groups>
@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, onMounted, createVNode, render } from "vue";
+import { provide, useTemplateRef, onMounted, createVNode, render,ref } from "vue";
 import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
@@ -120,11 +120,18 @@ const rectangleButton = { iconCss: "e-icons e-frame-5", content: "Rectangle" };
 const ellipseButton = { iconCss: "e-icons e-triangle", content: "Ellipse" };
 const regionButton = { iconCss: "e-icons e-table", content: "Region" };
 
+const activeLayout = ref("Classic");
+const detectMobile = () => {
+   if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
+    activeLayout.value = "Simplified"
+   }
+};
+
 onMounted(() => {
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
-
+  detectMobile()
 
 });
 

@@ -45,8 +45,8 @@ export default defineConfig({
   compression({
     threshold: 1024, // 1KB minimum - recommended
     //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
-    include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
-    exclude: [/\.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2)$/],
+    include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
+    exclude: [/\.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2|shx|pb)$/, /MstnFontConfig.xml$/],
     algorithms: [ // Production: slower builds, better compression
       defineAlgorithm('gzip', { level: 9 }), // Maximum compression
 

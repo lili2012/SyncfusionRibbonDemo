@@ -14,7 +14,9 @@
     "publish":"docker compose push inspect",
     "docker": "docker compose up -d on",
     "inspect": "docker compose run --service-ports inspect --rm --it ",
-    "rm":"docker rm -vf $(docker ps -aq)"
+    "rm":"docker rm -vf $(docker ps -aq)",
+    "cos":"node cos/cos.cjs"
+
   },
   "dependencies": {
     "@syncfusion/ej2-base": "32.1.24",
@@ -45,6 +47,8 @@
     "vite": "^8.0.0",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression2": "^2.5.3",
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": "^3.2.5",
+    "cos-nodejs-sdk-v5":"latest",
+    "batch": "^0.6.1"
   }
 }

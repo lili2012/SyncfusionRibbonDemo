@@ -6,3 +6,6 @@ https://cloud.tencent.com/developer/article/1834207
 https://console.cloud.tencent.com/lighthouse/instance/index?rid=4
 
 docker rm -vf $(docker ps -aq)
+
+wsl.exe
+gzip -k public/gzip.js

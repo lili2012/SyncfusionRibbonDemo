@@ -8,27 +8,13 @@ import zlib from "zlib";
 
 
 export default defineConfig({
-  //base: "/SyncfusionRibbonDemo/",
   server: {
     port: 5175,
     https: {
       key: fs.readFileSync('./cert/key.pem'),
       cert: fs.readFileSync('./cert/cert.pem'),
     },
-    proxy: {
-      '/dwg/127.0.0.1/': {
-        target: "http://localhost:5175",
-        changeOrigin: true,
-        rewrite: (requestPath) => {
-          const testpath = path.resolve(__dirname, `./public${requestPath}`)
-          if (!fs.existsSync(testpath)) {
-            const filename = path.basename(testpath)
-            requestPath = `/dwg/${filename}`
-          }
-          return requestPath
-        }
-      },
-    }
+
   },
   plugins: [vue({
     template: {

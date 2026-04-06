@@ -11,8 +11,8 @@ export default defineConfig({
   server: {
     port: 5175,
     https: {
-      key: fs.readFileSync('./cert/key.pem'),
-      cert: fs.readFileSync('./cert/cert.pem'),
+      key: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/oda/cert/key.pem'),
+      cert: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/oda/cert/cert.pem'),
     },
 
   },
@@ -30,9 +30,9 @@ export default defineConfig({
   },
   compression({
     threshold: 1024, // 1KB minimum - recommended
-    //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
-    include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
-    exclude: [/\.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2|shx|pb)$/, /MstnFontConfig.xml$/],
+    //include: [//.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
+    include: [//.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
+    exclude: [//.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2|shx|pb)$/, /MstnFontConfig.xml$/],
     algorithms: [ // Production: slower builds, better compression
       defineAlgorithm('gzip', { level: 9 }), // Maximum compression
 

@@ -92,22 +92,46 @@
 
 <script setup lang="ts">
 import { provide, useTemplateRef, onMounted, createVNode, render,ref } from "vue";
-import { RibbonFileMenu, RibbonColorPicker } from "@syncfusion/ej2-vue-ribbon";
+import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
 import Drawing from "./components/Drawing.vue"
+import { useFileDialog } from '@vueuse/core'
+import { upload } from "./components/UploadFile"
 
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
+
+const { files, open, reset, onCancel, onChange } = useFileDialog({
+  accept: '.dwg,.dxf', // Set to accept only image files
+  directory: false, // Select directories instead of files if set true
+  multiple: false,
+
+})
+onChange((files) => {
+  const file = files?.item(0)
+  if(file){
+    const aborter = new AbortController();
+    upload(file, aborter.signal)
+    reset()
+  }
+
+})
 
 const fileSettings = {
   visible: true,
   text: '文件',
   menuItems: [
-    { text: "新建", iconCss: "e-icons e-file-new", id: "filenew" },
     { text: "打开", iconCss: "e-icons e-file-document", id: "fileopen" }
-  ]
+  ],
+  select:(args:FileMenuEventArgs)=>{
+    if(args.item.id === "fileopen"){
+      open()
+
+    }
+
+  }
 };
 const lineButton = {
   iconCss: "e-icons e-line", content: "Line", clicked: () => CommandStack.execute("line")

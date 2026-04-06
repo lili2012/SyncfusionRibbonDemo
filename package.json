@@ -11,12 +11,11 @@
     "predeploy": "npm run build",
     "cert": ".\\cert\\mkcert.exe -key-file ./cert/key.pem -cert-file ./cert/cert.pem localhost",
     "buildd": "docker compose build inspect",
-    "publish":"docker compose push inspect",
+    "publish": "docker compose push inspect",
     "docker": "docker compose up -d on",
     "inspect": "docker compose run --service-ports inspect --rm --it ",
-    "rm":"docker rm -vf $(docker ps -aq)",
-    "cos":"node cos/cos.cjs"
-
+    "rm": "docker rm -vf $(docker ps -aq)",
+    "cos": "node cos/cos.cjs"
   },
   "dependencies": {
     "@syncfusion/ej2-base": "32.1.24",
@@ -32,23 +31,26 @@
     "@syncfusion/ej2-vue-ribbon": "32.1.24",
     "@syncfusion/ej2-vue-schedule": "32.1.25",
     "@syncfusion/ej2-vue-splitbuttons": "32.1.24",
-    "openai": "^6.17.0",
+    "@vueuse/core": "latest",
+    "openai": "^6.33.0",
     "pinia": "^3.0.4",
     "sgcad": "workspace:*",
     "three": "workspace:*",
-    "vue": "^3.5.30"
+    "vue": "^3.5.32",
+    "cos-js-sdk-v5": "latest"
   },
   "devDependencies": {
     "@types/three": "^0.183.1",
     "@vitejs/plugin-vue": "^6.0.5",
+    "batch": "^0.6.1",
+    "cos-nodejs-sdk-v5": "latest",
     "gh-pages": "^6.3.0",
     "terser": "^5.46.1",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.0",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-compression2": "^2.5.3",
-    "vue-tsc": "^3.2.5",
-    "cos-nodejs-sdk-v5":"latest",
-    "batch": "^0.6.1"
-  }
+    "vue-tsc": "^3.2.6"
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

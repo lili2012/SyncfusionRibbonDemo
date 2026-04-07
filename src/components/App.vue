@@ -96,9 +96,9 @@ import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs } from "@syncfusio
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
-import Drawing from "./components/Drawing.vue"
+import Drawing from "@/components/Drawing.vue"
 import { useFileDialog } from '@vueuse/core'
-import { upload } from "./components/UploadFile"
+import { fileUpload } from "@/utils/FileUpload"
 
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
@@ -107,13 +107,13 @@ const { files, open, reset, onCancel, onChange } = useFileDialog({
   accept: '.dwg,.dxf', // Set to accept only image files
   directory: false, // Select directories instead of files if set true
   multiple: false,
-
 })
+
 onChange((files) => {
   const file = files?.item(0)
   if(file){
     const aborter = new AbortController();
-    upload(file, aborter.signal)
+    fileUpload(file, aborter.signal)
     reset()
   }
 

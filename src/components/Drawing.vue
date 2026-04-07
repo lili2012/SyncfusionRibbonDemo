@@ -17,7 +17,7 @@ const props = defineProps<{
 }>()
 
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
-import { FetchDrawing } from "./FetchDrawing";
+import { FetchDrawing } from "../utils/FetchDrawing";
 import { useTemplateRef, onMounted } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';

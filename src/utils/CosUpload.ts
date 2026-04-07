@@ -1,4 +1,5 @@
 import COS from "cos-js-sdk-v5"
+import { useUserStore } from "sgcad";
 const cos = new COS({
   SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
   SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
@@ -37,27 +38,33 @@ export async function upload(file: File, signal: AbortSignal) {
   }
 
 
-  let taskId;
+
   cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
     Key: file.name + '.gz',
     Body: buffer,
     SliceSize: 1024 * 1024, // 大于1mb才进行分块上传
-    onTaskReady: function (tid) {
-      taskId = tid;
+    onTaskReady: (tid) => {
+      signal.addEventListener(
+        "abort",
+        () => {
+          cos.cancelTask(tid);
+        },
+        { once: true },
+      );
     },
     onProgress: function (progressData) {
       console.log('上传中', JSON.stringify(progressData));
     },
-  }, function (err, data) {
+  }, 
+   (err, data)=> {
+    if(data.statusCode === 200){
+      const userStore = useUserStore()
+      userStore.sendText("uploaded", data.Location);
+    }
     console.log(err, data);
   });
-
-  return taskId
-  // 可使用队列暂停、重启任务
-  // cos.pauseTask(taskId);
-
 
 
 

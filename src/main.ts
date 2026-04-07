@@ -1,4 +1,4 @@
-import App from './App.vue'
+import App from './components/App.vue'
 import { createApp} from 'vue'
 import { registerLicense } from '@syncfusion/ej2-base';
 import { useSelectionSetStore, useCommandLineStore, useUserStore } from 'sgcad';

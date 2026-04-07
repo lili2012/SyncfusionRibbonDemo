@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useTemplateRef, onMounted, createVNode, render,ref } from "vue";
+import { provide, useTemplateRef, onMounted, createVNode, render, ref } from "vue";
 import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
@@ -137,7 +137,7 @@ const lineButton = {
   iconCss: "e-icons e-line", content: "Line", clicked: () => CommandStack.execute("line")
 };
 
-const polylineButton = { iconCss: "e-icons e-perimeter", content: "Polyline",  clicked: () => CommandStack.execute("polyline")};
+const polylineButton = { iconCss: "e-icons e-perimeter", content: "Polyline", clicked: () => CommandStack.execute("polyline") };
 const circleButton = { iconCss: "e-icons e-circle", content: "Circle" };
 const arcButton = { iconCss: "e-icons e-radius", content: "Arc" };
 const rectangleButton = { iconCss: "e-icons e-frame-5", content: "Rectangle" };
@@ -146,9 +146,9 @@ const regionButton = { iconCss: "e-icons e-table", content: "Region" };
 
 const activeLayout = ref("Classic");
 const detectMobile = () => {
-   if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
     activeLayout.value = "Simplified"
-   }
+  }
 };
 
 onMounted(() => {
@@ -158,6 +158,7 @@ onMounted(() => {
   detectMobile()
 
 });
+
 
 const selected = (args: SelectEventArgs) => {
   if (args.isInteracted) {
@@ -222,7 +223,7 @@ const addNewPage = () => {
 
   //const drawingUrl = url + drawingName
 
-  const drawingContainer = document.createElement('div');
+  const drawingContainer = document.createElement('div'); 
 
   //https://stackoverflow.com/questions/9519841/why-does-this-css-margin-top-style-not-work/9519933#9519933
   //https://www.tabnine.com/academy/javascript/how-to-set-style-to-an-html-element-using-javascript/

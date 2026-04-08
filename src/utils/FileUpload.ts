@@ -1,5 +1,6 @@
 import { useUserStore } from "sgcad";
 import { upload } from "./CosUpload"
+import { Db } from "sgcad";
 export const fileUpload = async (file: File, signal: AbortSignal) => {
 
   // const name = file.name
@@ -21,7 +22,9 @@ export const fileUpload = async (file: File, signal: AbortSignal) => {
   //   });
   // }
   // //获取文件.pb.br文件
-  upload(file, signal)
+
+  //upload(file, signal)
+
 
 
 

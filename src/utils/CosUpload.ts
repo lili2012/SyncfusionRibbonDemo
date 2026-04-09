@@ -1,5 +1,5 @@
 import COS from "cos-js-sdk-v5"
-import { useUserStore } from "sgcad";
+import { UploadService, rpcImpl } from "sgcad";
 const cos = new COS({
   SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
   SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
@@ -38,11 +38,11 @@ export async function upload(file: File, signal: AbortSignal) {
   }
 
 
-
+  const filename = file.name + '.gz'
   cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
-    Key: file.name + '.gz',
+    Key: filename,
     Body: buffer,
     SliceSize: 1024 * 1024, // 大于1mb才进行分块上传
     onTaskReady: (tid) => {
@@ -57,14 +57,21 @@ export async function upload(file: File, signal: AbortSignal) {
     onProgress: function (progressData) {
       console.log('上传中', JSON.stringify(progressData));
     },
-  }, 
-   (err, data)=> {
-    if(data.statusCode === 200){
-      const userStore = useUserStore()
-      userStore.sendText("uploaded", data.Location);
-    }
-    console.log(err, data);
-  });
+  },
+    (err, data) => {
+      if (data.statusCode === 200) {
+
+        const upload = new UploadService(rpcImpl, false, false);
+        upload.uploadDwg({ filename }).then((response) => {
+          console.log(response.filename)
+
+
+        })
+
+
+      }
+      //console.log(err, data);
+    });
 
 
 

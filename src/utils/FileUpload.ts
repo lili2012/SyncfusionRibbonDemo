@@ -23,7 +23,7 @@ export const fileUpload = async (file: File, signal: AbortSignal) => {
   // }
   // //获取文件.pb.br文件
 
-  //upload(file, signal)
+  upload(file, signal)
 
 
 

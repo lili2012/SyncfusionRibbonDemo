@@ -98,7 +98,7 @@ import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirectiv
 import { CommandStack } from "sgcad";
 import Drawing from "@/components/Drawing.vue"
 import { useFileDialog } from '@vueuse/core'
-import { fileUpload } from "@/utils/FileUpload"
+
 
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
@@ -112,8 +112,7 @@ const { files, open, reset, onCancel, onChange } = useFileDialog({
 onChange((files) => {
   const file = files?.item(0)
   if(file){
-    const aborter = new AbortController();
-    fileUpload(file, aborter.signal)
+    openNewDrawing(file)
     reset()
   }
 
@@ -209,7 +208,7 @@ const removing = (args: RemoveEventArgs) => {
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 //const url = "/dwg/"
-const drawings = ["单行文字1.dwg","S70-04 通信电缆敷设图.dxf"] //, ""dwg2013_04.dwg", " glow.dxf
+const drawings = ["Drawing4.dxf","S70-04 通信电缆敷设图.dxf"] //, ""dwg2013_04.dwg", " glow.dxf
 //const drawings = [ "draworder3.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
@@ -219,16 +218,8 @@ const drawings = ["单行文字1.dwg","S70-04 通信电缆敷设图.dxf"] //, ""
 
 
 //TODO: 目前的做法是每次新建一个tab就加载一个dwg文件，后续可以改成下载好文件后再加载，或者新建tab时先不加载文件，等用户切换到该tab时再加载
-const openNewDrawing=(drawingName:string)=>{
-
-}
-
-
-
-
-const addNewPage = () => {
-  const drawingName = drawings[(drawingNumber - 1) % 2]
-  const tabObj = TabInstance.value!.ej2Instances;
+const openNewDrawing = (file:File)=>{
+ const tabObj = TabInstance.value!.ej2Instances;
 
   //const drawingUrl = url + drawingName
 
@@ -241,15 +232,26 @@ const addNewPage = () => {
   drawingContainer.style.width = "100%"
   drawingContainer.style.height = "100%"
   drawingContainer.dataset.pendingMount = 'true';
-  drawingContainer._mountProps = { drawingName };
+  drawingContainer._mountProps = { file };
   drawingNumber = drawingNumber + 1
-  const item = { header: { text: drawingName }, content: drawingContainer };
+  const item = { header: { text: file.name }, content: drawingContainer };
   const existItems = tabObj.items
   const insertIndex = existItems.length - 1;
   tabObj.addTab([item], insertIndex);
   //tabObj.selectedItem = insertIndex
   tabObj.select(insertIndex)
   // }
+
+}
+
+
+
+
+const addNewPage = () => {
+  const drawingName = drawings[(drawingNumber - 1) % 2]
+  const file = new File([""], drawingName)
+  openNewDrawing(file)
+ 
 }
 
 const deleteEntities = {

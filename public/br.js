@@ -1,6 +1,6 @@
 
 (function(){
-  if(!window.encoding || window.encoding==='gzip'){
+  if(!window.encoding || window.encoding==='gz'){
     window.encoding = 'br'
   }
 }());

@@ -2,17 +2,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "path";
 import fs from 'fs';
-//import viteCompression from 'vite-plugin-compression';
-import { compression, defineAlgorithm } from 'vite-plugin-compression2'
-import zlib from "zlib";
-
 
 export default defineConfig({
   server: {
     port: 5175,
     https: {
-      key: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/oda/cert/key.pem'),
-      cert: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/oda/cert/cert.pem'),
+      key: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/cert/key.pem'),
+      cert: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/cert/cert.pem'),
     },
 
   },
@@ -28,21 +24,7 @@ export default defineConfig({
       fs.rmSync(path.resolve(__dirname, './dist/assets'), { recursive: true, force: true });
     }
   },
-  compression({
-    threshold: 1024, // 1KB minimum - recommended
-    //include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|shx|pb)$/],
-    include: [/\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml)$/],
-    exclude: [/\.(dxf|dwg|bak|png|jpg|jpeg|gif|webp|woff|woff2|shx|pb)$/, /MstnFontConfig.xml$/],
-    algorithms: [ // Production: slower builds, better compression
-      defineAlgorithm('gzip', { level: 9 }), // Maximum compression
 
-      // Brotli: quality 10-11 recommended for static assets
-      defineAlgorithm('brotliCompress', {
-        params: {
-          [require('zlib').constants.BROTLI_PARAM_QUALITY]: 11
-        }
-      })]
-  }),
 
   ],
   resolve: {

@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  drawingName: string,
+  file: File
 }>()
 
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
@@ -24,9 +24,12 @@ import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-pop
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
+import { cosUpload, cosDownload } from "@/utils/Cos"
+
 //import { useUserStore } from "sgcad";
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
+let aborter: AbortController | null = null;
 function drawingShowSpinner() {
   showSpinner(this!);
 }
@@ -44,6 +47,11 @@ async function waitUntil(condition:()=>boolean, timeout = 1000) {
     }
   }
 }
+onMounted(() => {
+  if(aborter){
+    aborter.abort()
+  }
+})
 onMounted(async () => {
   createSpinner({
     target: ParentInstance.value!,
@@ -56,8 +64,17 @@ onMounted(async () => {
   tabObj.animation.next.effect = 'None'
   //const userStore = useUserStore()
   //await waitUntil(() => userStore.user !== "");
-  const db = await FetchDrawing(`/dwg/${props.drawingName}.pb`)
-
+  const file = props.file
+  aborter = new AbortController();
+  let db: Db | undefined = undefined
+  if(file.size > 0){
+    db = await cosUpload(file, aborter.signal)
+  }else{
+    const drawingName = file.name
+    db = await cosDownload(`/dwg/${drawingName}.pb.br`)
+    //db = await FetchDrawing(`/dwg/${drawingName}.pb`)
+  }
+  
   if (!db)
     return
   const sgdb = new SGDb()

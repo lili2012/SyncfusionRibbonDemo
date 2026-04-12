@@ -1,5 +1,5 @@
 import { Db } from 'sgcad'
-
+import { arrayBuffer2Db } from "@/utils/ParseBuffer"
 //import { useUserStore } from 'sgcad'
 export async function FetchDrawing(url: string): Promise<Db | undefined> {
     //const url = "http://localhost:3000/S70-04 通信电缆敷设图.dxf.pb"
@@ -10,9 +10,8 @@ export async function FetchDrawing(url: string): Promise<Db | undefined> {
     if (response.ok) {
         //userStore.sendText("open", url)
         const arrayBuffer = await response.arrayBuffer()
-        const u8array = new Uint8Array(arrayBuffer)
-        const protobufjsdb: Db = Db.decode(u8array, u8array.byteLength);
-        return protobufjsdb
+        const db = arrayBuffer2Db(arrayBuffer)
+        return db
     }
     return undefined
 }

@@ -9,3 +9,6 @@ docker rm -vf $(docker ps -aq)
 
 wsl.exe
 gzip -k public/gzip.js
+
+C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q 11 public\br.js
+C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q 11 public\dwg\Drawing4.dxf.pb

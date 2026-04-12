@@ -1,14 +1,14 @@
 import COS from "cos-js-sdk-v5"
-import { UploadService, rpcImpl } from "sgcad";
-
+import { Db, UploadService, rpcImpl } from "sgcad";
+import { arrayBuffer2Db } from "@/utils/ParseBuffer"
 const cos = new COS({
   SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
   SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
 });
-const Bucket = 'cad-1412468267';
+const Bucket = 'drawings-1412468267';
 const Region = 'ap-guangzhou';
 
-export async function upload(file: File, signal: AbortSignal) {
+export async function cosUpload(file: File, signal: AbortSignal): Promise<Db | undefined> {
   const readstream = file.stream().pipeThrough(
     new CompressionStream("gzip"),
   );
@@ -64,6 +64,11 @@ export async function upload(file: File, signal: AbortSignal) {
     const upload = new UploadService(rpcImpl, false, false);
     const response = await upload.uploadDwg({ filename });
     const pbfile = response.filename
+    return await cosDownload(pbfile)
+  }
+}
+
+export async function cosDownload(pbfile: string): Promise<Db | undefined> {
     const requestResult: COS.RequestResult = await cos.getObject({
       Bucket: Bucket, Region: Region, Key: pbfile, DataType: 'arraybuffer', onProgress: function (progressData) {
         console.log(JSON.stringify(progressData));
@@ -72,15 +77,10 @@ export async function upload(file: File, signal: AbortSignal) {
     if (requestResult.statusCode === 200) {
       const body = requestResult.Body
       if (body instanceof ArrayBuffer) {
-        const array = new Uint8Array(body)
+        const db = arrayBuffer2Db(body)
+        return db;
 
       }
     }
-
-  }
-
-
-
-
-
+    return undefined;
 }

@@ -1,5 +1,6 @@
 import COS from "cos-js-sdk-v5"
 import { UploadService, rpcImpl } from "sgcad";
+
 const cos = new COS({
   SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
   SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
@@ -39,7 +40,7 @@ export async function upload(file: File, signal: AbortSignal) {
 
 
   const filename = file.name + '.gz'
-  cos.uploadFile({
+  const result = await cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
     Key: filename,
@@ -57,21 +58,28 @@ export async function upload(file: File, signal: AbortSignal) {
     onProgress: function (progressData) {
       console.log('上传中', JSON.stringify(progressData));
     },
-  },
-    (err, data) => {
-      if (data.statusCode === 200) {
+  });
 
-        const upload = new UploadService(rpcImpl, false, false);
-        upload.uploadDwg({ filename }).then((response) => {
-          console.log(response.filename)
-
-
-        })
-
+  if (result.statusCode === 200) {
+    const upload = new UploadService(rpcImpl, false, false);
+    const response = await upload.uploadDwg({ filename });
+    const pbfile = response.filename
+    const requestResult: COS.RequestResult = await cos.getObject({
+      Bucket: Bucket, Region: Region, Key: pbfile, DataType: 'arraybuffer', onProgress: function (progressData) {
+        console.log(JSON.stringify(progressData));
+      }
+    });
+    if (requestResult.statusCode === 200) {
+      const body = requestResult.Body
+      if (body instanceof ArrayBuffer) {
+        const array = new Uint8Array(body)
 
       }
-      //console.log(err, data);
-    });
+    }
+
+  }
+
+
 
 
 

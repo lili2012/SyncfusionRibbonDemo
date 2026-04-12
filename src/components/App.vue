@@ -216,10 +216,19 @@ const drawings = ["单行文字1.dwg","S70-04 通信电缆敷设图.dxf"] //, ""
 //const drawings = [ "text1.dxf","Drawing4.dxf"]
 //const drawings = ["Drawing3.dxf"]
 
-const addNewPage = () => {
-  const tabObj = TabInstance.value!.ej2Instances;
 
+
+//TODO: 目前的做法是每次新建一个tab就加载一个dwg文件，后续可以改成下载好文件后再加载，或者新建tab时先不加载文件，等用户切换到该tab时再加载
+const openNewDrawing=(drawingName:string)=>{
+
+}
+
+
+
+
+const addNewPage = () => {
   const drawingName = drawings[(drawingNumber - 1) % 2]
+  const tabObj = TabInstance.value!.ej2Instances;
 
   //const drawingUrl = url + drawingName
 

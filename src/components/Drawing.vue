@@ -71,7 +71,7 @@ onMounted(async () => {
     db = await cosUpload(file, aborter.signal)
   }else{
     const drawingName = file.name
-    db = await cosDownload(`/dwg/${drawingName}.pb.br`)
+    db = await cosDownload(`/dwg/${drawingName}.pb.${window.encoding}`)
     //db = await FetchDrawing(`/dwg/${drawingName}.pb`)
   }
   

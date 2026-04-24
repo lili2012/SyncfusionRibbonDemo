@@ -1,6 +1,7 @@
 import { useUserStore } from "sgcad";
 import { cosUpload } from "./Cos"
-import { Db } from "sgcad";
+import { genSha256 } from "@/utils/sha256"
+import { Db, UploadService, rpcImpl } from "sgcad";
 export const fileUpload = async (file: File, signal: AbortSignal) => {
 
   // const name = file.name
@@ -23,7 +24,17 @@ export const fileUpload = async (file: File, signal: AbortSignal) => {
   // }
   // //获取文件.pb.br文件
 
-  cosUpload(file, signal)
+
+  //do frontend cache
+
+  //do backend has
+  const arrayBuffer = await file.arrayBuffer();
+  const sha256 = await genSha256(arrayBuffer);
+  const filename = file.name
+  const upload = new UploadService(rpcImpl, false, false);
+  const response = await upload.getFile({ filename,  sha256});
+
+  cosUpload(arrayBuffer, filename, sha256,  signal)
 
 
 

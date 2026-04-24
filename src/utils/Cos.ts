@@ -1,6 +1,7 @@
 import COS from "cos-js-sdk-v5"
 import { Db, UploadService, rpcImpl } from "sgcad";
 import { arrayBuffer2Db } from "@/utils/ParseBuffer"
+
 const cos = new COS({
   SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
   SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
@@ -8,13 +9,16 @@ const cos = new COS({
 const Bucket = 'drawings-1412468267';
 const Region = 'ap-guangzhou';
 
-export async function cosUpload(file: File, signal: AbortSignal): Promise<Db | undefined> {
-  const readstream = file.stream().pipeThrough(
+
+export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha256: string, signal: AbortSignal): Promise<Db | undefined> {
+
+  const stream = new Blob([arrayBuffer]).stream();
+  const readstream = stream.pipeThrough(
     new CompressionStream("gzip"),
   );
   const reader = readstream.getReader();
   //gzip后文件不应超过原始文件大小
-  let buffer = new ArrayBuffer(file.size, { maxByteLength: file.size });
+  let buffer = new ArrayBuffer(arrayBuffer.byteLength, { maxByteLength: arrayBuffer.byteLength });
   const bufferView = new Uint8Array(buffer)
   let bytesReceived = 0;
   while (true) {
@@ -29,8 +33,8 @@ export async function cosUpload(file: File, signal: AbortSignal): Promise<Db | u
 
     const total = bytesReceived + value.byteLength
 
-    if (total >= file.size) {
-      buffer = await file.arrayBuffer()
+    if (total >= arrayBuffer.byteLength) {
+      buffer = arrayBuffer
       break;
     }
 
@@ -38,13 +42,15 @@ export async function cosUpload(file: File, signal: AbortSignal): Promise<Db | u
     bytesReceived = total;
   }
 
-
-  const filename = file.name + '.gz'
+  const filename = fileName + '.gz'
   const result = await cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
     Key: filename,
     Body: buffer,
+    // Headers: {
+    //   'x-cos-meta-sh256': sha256Str,
+    // },
     SliceSize: 1024 * 1024, // 大于1mb才进行分块上传
     onTaskReady: (tid) => {
       signal.addEventListener(
@@ -62,25 +68,25 @@ export async function cosUpload(file: File, signal: AbortSignal): Promise<Db | u
 
   if (result.statusCode === 200) {
     const upload = new UploadService(rpcImpl, false, false);
-    const response = await upload.uploadDwg({ filename });
+    const response = await upload.uploadDwg({ filename, sha256 });
     const pbfile = response.filename
     return await cosDownload(pbfile)
   }
 }
 
 export async function cosDownload(pbfile: string): Promise<Db | undefined> {
-    const requestResult: COS.RequestResult = await cos.getObject({
-      Bucket: Bucket, Region: Region, Key: pbfile, DataType: 'arraybuffer', onProgress: function (progressData) {
-        console.log(JSON.stringify(progressData));
-      }
-    });
-    if (requestResult.statusCode === 200) {
-      const body = requestResult.Body
-      if (body instanceof ArrayBuffer) {
-        const db = arrayBuffer2Db(body)
-        return db;
-
-      }
+  const requestResult: COS.RequestResult = await cos.getObject({
+    Bucket: Bucket, Region: Region, Key: pbfile, DataType: 'arraybuffer', onProgress: function (progressData) {
+      console.log(JSON.stringify(progressData));
     }
-    return undefined;
+  });
+  if (requestResult.statusCode === 200) {
+    const body = requestResult.Body
+    if (body instanceof ArrayBuffer) {
+      const db = arrayBuffer2Db(body)
+      return db;
+
+    }
+  }
+  return undefined;
 }

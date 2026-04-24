@@ -13,7 +13,9 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "preserve",
-
+    "paths": {
+      "@/*": ["src/*"] // This maps "@/" to the "src/" folder
+    },
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

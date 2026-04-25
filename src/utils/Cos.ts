@@ -1,11 +1,16 @@
 import COS from "cos-js-sdk-v5"
-import { Db, UploadService, rpcImpl } from "sgcad";
+import { Db, UploadService, rpcImpl,Credential } from "sgcad";
 import { arrayBuffer2Db } from "@/utils/ParseBuffer"
+export const credential = new Credential
+let cos: COS| undefined = undefined
+export function initializeCos(cred: Credential) {
+  cos = new COS({
+    SecretId: cred.tmpSecretId,
+    SecretKey: cred.tmpSecretKey,
+    SecurityToken: cred.tmpToken,
+  });
+}
 
-const cos = new COS({
-  SecretId: 'AKID9B73ubDnESSGwdCkGbieQ0PceV9awFNQ',
-  SecretKey: 'tZ1FF4h7MoBIEwRjpkT4RefcR4VinfKo'
-});
 const Bucket = 'drawings-1412468267';
 const Region = 'ap-guangzhou';
 
@@ -44,7 +49,7 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
 
   const cosFileName = fileName + '.gz'
 
-  const result = await cos.uploadFile({
+  const result = await cos?.uploadFile({
     Bucket: Bucket,
     Region: Region,
     Key: cosFileName,
@@ -57,7 +62,7 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
       signal.addEventListener(
         "abort",
         () => {
-          cos.cancelTask(tid);
+          cos?.cancelTask(tid);
         },
         { once: true },
       );
@@ -67,7 +72,7 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
     },
   });
 
-  if (result.statusCode === 200) {
+  if (result?.statusCode === 200) {
     const upload = new UploadService(rpcImpl, false, false);
     const response = await upload.uploadDwg({ filename:fileName, sha256 });
     const pbfile = response.filename
@@ -77,12 +82,12 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
 }
 
 export async function cosDownload(pbfile: string): Promise<Db | undefined> {
-  const requestResult: COS.RequestResult = await cos.getObject({
+  const requestResult: COS.RequestResult | undefined = await cos?.getObject({
     Bucket: Bucket, Region: Region, Key: pbfile, DataType: 'arraybuffer', onProgress: function (progressData) {
       console.log(JSON.stringify(progressData));
     }
   });
-  if (requestResult.statusCode === 200) {
+  if (requestResult?.statusCode === 200) {
     const body = requestResult.Body
     if (body instanceof ArrayBuffer) {
       const db = arrayBuffer2Db(body)

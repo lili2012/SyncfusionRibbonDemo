@@ -1,4 +1,4 @@
-export async function genSha256(arrayBuffer: ArrayBuffer) {
+export async function genSha256(arrayBuffer: ArrayBuffer): Promise<string> {
 
   const hashAsArrayBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
 

@@ -24,8 +24,8 @@ import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-pop
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
-import { cosUpload, cosDownload } from "@/utils/Cos"
-
+import {  cosDownload } from "@/utils/Cos"
+import {fileUpload} from "@/utils/FileUpload"
 //import { useUserStore } from "sgcad";
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
@@ -68,7 +68,7 @@ onMounted(async () => {
   aborter = new AbortController();
   let db: Db | undefined = undefined
   if(file.size > 0){
-    db = await cosUpload(file, aborter.signal)
+    db = await fileUpload(file, aborter.signal)
   }else{
     const drawingName = file.name
     db = await cosDownload(`/dwg/${drawingName}.pb.${window.encoding}`)

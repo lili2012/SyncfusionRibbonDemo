@@ -10,7 +10,7 @@ const Bucket = 'drawings-1412468267';
 const Region = 'ap-guangzhou';
 
 
-export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha256: string, signal: AbortSignal): Promise<Db | undefined> {
+export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha256: string, signal: AbortSignal): Promise<string | undefined> {
 
   const stream = new Blob([arrayBuffer]).stream();
   const readstream = stream.pipeThrough(
@@ -42,11 +42,12 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
     bytesReceived = total;
   }
 
-  const filename = fileName + '.gz'
+  const cosFileName = fileName + '.gz'
+
   const result = await cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
-    Key: filename,
+    Key: cosFileName,
     Body: buffer,
     // Headers: {
     //   'x-cos-meta-sh256': sha256Str,
@@ -68,10 +69,11 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
 
   if (result.statusCode === 200) {
     const upload = new UploadService(rpcImpl, false, false);
-    const response = await upload.uploadDwg({ filename, sha256 });
+    const response = await upload.uploadDwg({ filename:fileName, sha256 });
     const pbfile = response.filename
-    return await cosDownload(pbfile)
+    return pbfile
   }
+  return undefined
 }
 
 export async function cosDownload(pbfile: string): Promise<Db | undefined> {

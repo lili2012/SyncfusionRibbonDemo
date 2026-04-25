@@ -1,8 +1,9 @@
 import { useUserStore } from "sgcad";
-import { cosUpload } from "./Cos"
+import { cosDownload, cosUpload } from "./Cos"
 import { genSha256 } from "@/utils/sha256"
 import { Db, UploadService, rpcImpl } from "sgcad";
-export const fileUpload = async (file: File, signal: AbortSignal) => {
+
+export const fileUpload = async (file: File, signal: AbortSignal) : Promise<Db | undefined>=> {
 
   // const name = file.name
   // const LastModified = file.lastModified
@@ -33,11 +34,16 @@ export const fileUpload = async (file: File, signal: AbortSignal) => {
   const filename = file.name
   const upload = new UploadService(rpcImpl, false, false);
   const response = await upload.getFile({ filename,  sha256});
+  let pbfile = response.filename
 
-  cosUpload(arrayBuffer, filename, sha256,  signal)
+  if(!pbfile){
+    pbfile = await cosUpload(arrayBuffer, filename, sha256,  signal)
+  }
+  
 
-
-
+  if (pbfile) {
+    return cosDownload(pbfile)
+  }
 
 
 }

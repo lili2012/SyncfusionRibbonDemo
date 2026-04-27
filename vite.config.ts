@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     port: 5175,
     https: {
-      key: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/cert/key.pem'),
-      cert: fs.readFileSync('C:/Users/shuya/Desktop/webcad/backend/cert/cert.pem'),
+      key: fs.readFileSync(process.env.USERPROFILE + '/Desktop/webcad/backend/cert/key.pem'),
+      cert: fs.readFileSync(process.env.USERPROFILE + '/Desktop/webcad/backend/cert/cert.pem'),
     },
 
   },

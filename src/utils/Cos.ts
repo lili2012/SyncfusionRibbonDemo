@@ -76,16 +76,15 @@ export async function cosUpload(arrayBuffer: ArrayBuffer, fileName: string, sha2
     bytesReceived = total;
   }
 
-  const cosFileName = fileName + '.gz'
-
-  const result = await cos?.uploadFile({
+  //const filename = fileName + '.gz'
+  const result = await cos.uploadFile({
     Bucket: Bucket,
     Region: Region,
-    Key: cosFileName,
+    Key: sha256 + '.gz',
     Body: buffer,
-    // Headers: {
-    //   'x-cos-meta-sh256': sha256Str,
-    // },
+    Headers: {
+      'x-cos-meta-name':encodeURIComponent(fileName),
+    },
     SliceSize: 1024 * 1024, // 大于1mb才进行分块上传
     onTaskReady: (tid) => {
       signal.addEventListener(

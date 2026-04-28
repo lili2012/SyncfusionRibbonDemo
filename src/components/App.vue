@@ -162,7 +162,7 @@ onMounted(() => {
 
 });
 
-let vNode!;
+let try123 = undefined
 const selected = (args: SelectEventArgs) => {
   if (args.isInteracted) {
     const selectedIndex = args.selectedIndex
@@ -190,9 +190,11 @@ const selected = (args: SelectEventArgs) => {
       pendingElements.forEach(element => {
         if (element._mountProps) {
           const drawing = createVNode(Drawing, element._mountProps)
-          vNode = drawing
+
 
           render(drawing, element)
+          try123 = element
+
           // Clear the pending flag
           element.dataset.pendingMount = 'false';
         }
@@ -202,6 +204,9 @@ const selected = (args: SelectEventArgs) => {
 }
 
 const removing = (args: RemoveEventArgs) => {
+  if(try123){
+    render(null, try123);
+  }
   const removedIndex = args.removedIndex
   const tabObj = TabInstance.value!.ej2Instances;
   const existItems = tabObj.items

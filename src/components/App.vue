@@ -80,7 +80,7 @@
   </ejs-ribbon>
   <ejs-tab :selectedItem=0 swipeMode='None' class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill"
     overflowMode='Scrollable' headerPlacement="Top" cssClass="e-fill" :selected='selected' :removing='removing'
-    :removed="removed" :showCloseButton=true>
+    :showCloseButton=true>
     <e-tabitems>
       <e-tabitem :header="headerText0" :content="content0"></e-tabitem>
       <e-tabitem :header="headerText1" :content="'introPageComponent'"></e-tabitem>
@@ -204,21 +204,23 @@ const selected = (args: SelectEventArgs) => {
 }
 
 const removing = (args: RemoveEventArgs) => {
-  if(try123){
-    render(null, try123);
-  }
+
   const removedIndex = args.removedIndex
   const tabObj = TabInstance.value!.ej2Instances;
   const existItems = tabObj.items
+  const currItem = existItems[removedIndex]
+  if (currItem.content) {
+    render(null, currItem.content);
+  }
   const n = existItems.length
   if (removedIndex === (n - 2)) {
     tabObj.select(n - 3)
   }
 }
 
-const removed = (args: RemoveEventArgs) => {
-
-}
+// const removed = (args: RemoveEventArgs) => {
+//   console.log("removed", args)
+// }
 
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"

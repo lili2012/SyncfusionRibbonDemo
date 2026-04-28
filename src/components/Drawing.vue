@@ -18,14 +18,14 @@ const props = defineProps<{
 
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "../utils/FetchDrawing";
-import { useTemplateRef, onMounted, onUnmounted } from "vue";
+import { useTemplateRef, onMounted, onUnmounted, onBeforeUnmount } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h, createVNode, render } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
-import {  cosDownload } from "@/utils/Cos"
-import {fileUpload} from "@/utils/FileUpload"
+import { cosDownload } from "@/utils/Cos"
+import { fileUpload } from "@/utils/FileUpload"
 //import { useUserStore } from "sgcad";
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
@@ -36,13 +36,13 @@ function drawingShowSpinner() {
 function drawingHideSpinner() {
   hideSpinner(this!);
 }
-async function waitUntil(condition:()=>boolean, timeout = 1000) {
+async function waitUntil(condition: () => boolean, timeout = 1000) {
   const time = 100
   let acumulateTime = 0
   while (!condition()) {
     await new Promise((resolve) => setTimeout(resolve, time));
     acumulateTime += time
-    if(acumulateTime >= timeout){
+    if (acumulateTime >= timeout) {
       return;
     }
   }
@@ -67,14 +67,14 @@ onMounted(async () => {
   const file = props.file
   aborter = new AbortController();
   let db: Db | undefined = undefined
-  if(file.size > 0){
+  if (file.size > 0) {
     db = await fileUpload(file, aborter.signal)
-  }else{
+  } else {
     const drawingName = file.name
     db = await cosDownload(`/${drawingName}.pb.${window.encoding}`)
     //db = await FetchDrawing(`/dwg/${drawingName}.pb`)
   }
-  
+
   if (!db)
     return
   const sgdb = new SGDb()
@@ -119,8 +119,24 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
-onUnmounted(()=>{
-  console.log("unmounted")
+onBeforeUnmount(() => {
+  const tabObj = TabInstance.value!.ej2Instances;
+  // tabObj.removeallTabs();
+
+  // console.log(TabInstance.value!.ej2Instances)
+  // ParentInstance.value!.querySelectorAll('.e-item').forEach(item => {
+  //   const content = item.firstChild as HTMLElement
+  //   if (content) {
+  //     render(null, content)
+  //   }
+  // })
+  const n = tabObj.items.length
+  for (let i = n - 1; i >= 0; i--) {
+    const content = tabObj.items[i].content
+    if (content) {
+      render(null, content)
+    }
+  }
 
 })
 const selected = (args: SelectEventArgs) => {

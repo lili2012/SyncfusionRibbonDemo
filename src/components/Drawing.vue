@@ -18,7 +18,7 @@ const props = defineProps<{
 
 import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "../utils/FetchDrawing";
-import { useTemplateRef, onMounted } from "vue";
+import { useTemplateRef, onMounted, onUnmounted } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h, createVNode, render } from 'vue'
@@ -47,11 +47,11 @@ async function waitUntil(condition:()=>boolean, timeout = 1000) {
     }
   }
 }
-onMounted(() => {
-  if(aborter){
-    aborter.abort()
-  }
-})
+// onMounted(() => {
+//   if(aborter){
+//     aborter.abort()
+//   }
+// })
 onMounted(async () => {
   createSpinner({
     target: ParentInstance.value!,
@@ -71,7 +71,7 @@ onMounted(async () => {
     db = await fileUpload(file, aborter.signal)
   }else{
     const drawingName = file.name
-    db = await cosDownload(`/dwg/${drawingName}.pb.${window.encoding}`)
+    db = await cosDownload(`/${drawingName}.pb.${window.encoding}`)
     //db = await FetchDrawing(`/dwg/${drawingName}.pb`)
   }
   
@@ -119,6 +119,10 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
+onUnmounted(()=>{
+  console.log("unmounted")
+
+})
 const selected = (args: SelectEventArgs) => {
   // When a tab is selected, check if it has pending components to mount
   setTimeout(() => {

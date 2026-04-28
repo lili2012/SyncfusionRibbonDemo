@@ -16,7 +16,7 @@ const props = defineProps<{
 
 import { SGDb, Viewport, SGBlock } from "sgcad"
 
-import { useTemplateRef, onMounted, onBeforeMount, App, render  } from "vue";
+import { useTemplateRef, onMounted, onBeforeMount, App, render, onUnmounted  } from "vue";
 
 
 function onVisible() {
@@ -56,7 +56,9 @@ onMounted(async () => {
 
 })
 
-
+onUnmounted(()=>{
+  viewport.clear()
+})
 // ondestroyed() {
 //   this.dxfViewer.Destroy()
 //   this.dxfViewer = null

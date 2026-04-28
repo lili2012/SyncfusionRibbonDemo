@@ -1,20 +1,41 @@
 <template>
-  <div>
-   肥西核电站平面设计图是该核电站整体规划与布局的重要表现形式，涵盖了核电站内各主要建筑物、设施以及设备的空间位置安排。该设计图主要呈现了核电站的结构布局，包括反应堆厂房、蒸汽发生器、涡轮发电机组、电力变电站、冷却塔等关键组成部分的相对位置。核电站的平面设计图通常依据核安全标准和环境影响评估要求，精确标明了各设施的布置，以确保运行时的安全性、效率性和环境适应性。例如，反应堆厂房通常设有多重安全隔离层，以防止核泄漏，蒸汽发生器与涡轮机组的配置则优化了热能转换过程。此外，冷却系统的设计确保了反应堆在高温下稳定运行，并通过冷却塔实现热量的释放。在设计过程中，还需要考虑到电力输送的线路和区域规划，以确保核电站的输出能够有效连接到国家或地区的电网系统，满足不同时间段的电力需求。
-  </div>
-
-
-
+  <ejs-listview id='element' ref='list' :fields='fields' :select='onSelect'></ejs-listview>
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(['openFile'])
+import { ListViewComponent as EjsListview, SelectEventArgs } from "@syncfusion/ej2-vue-lists";
+import { ref, onMounted, useTemplateRef } from 'vue'
+import { UploadService, rpcImpl } from "sgcad";
+const list= useTemplateRef('list')
+
+onMounted(async () => {
+  const upload = new UploadService(rpcImpl, false, false);
+  const response = await upload.getDrawings({});
+
+  list.value.addItem(response.drawings);
+})
 
 
+const fields = { text: 'filename', id: 'sha256' };
 
+const onSelect = (args:SelectEventArgs) => {
+  console.log(args.data.sha256)
+  const drawingName = args.data.sha256 
+  const file = new File([""], drawingName)
+  const originalFileName = args.data.filename
+  emit('openFile', file, originalFileName)
+  list.value.unselectItem()
+};
 
 </script>
-<style module>
-
+<style>
+.e-listview .e-list-item {
+  /* text-align: center; */
+  color: black;
+  /* height: 100px; */
+  /* background-color: rgb(255, 255, 255); */
+}
 </style>
 
 //https://ej2.syncfusion.com/vue/documentation/listview/customizing-templates

@@ -162,7 +162,6 @@ onMounted(() => {
 
 });
 
-let try123 = undefined
 const selected = (args: SelectEventArgs) => {
   if (args.isInteracted) {
     const selectedIndex = args.selectedIndex
@@ -193,7 +192,6 @@ const selected = (args: SelectEventArgs) => {
 
 
           render(drawing, element)
-          try123 = element
 
           // Clear the pending flag
           element.dataset.pendingMount = 'false';
@@ -266,9 +264,9 @@ const openNewDrawing = (file: File, originalFileName?: string) => {
 
 
 const addNewPage = () => {
-  const drawingName = drawings[(drawingNumber - 1) % 2]
-  const file = new File([""], drawingName)
-  openNewDrawing(file)
+  const drawingName = "Drawing4.dxf"
+  const file = new File([""], "cfa11d79bd908cb7e9ae000069837f9700e7bd52e5877adba39f4f9ed4f7f258")
+  openNewDrawing(file, drawingName)
 
 }
 

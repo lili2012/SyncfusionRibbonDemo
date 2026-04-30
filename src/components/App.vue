@@ -126,14 +126,21 @@ const fileSettings = {
   visible: true,
   text: '文件',
   menuItems: [
-    { text: "打开", iconCss: "e-icons e-file-document", id: "fileopen" }
+    { text: "打开", iconCss: "e-icons e-file-document", id: "fileopen" },
+    { text: "打开文件-本地测试用", iconCss: "e-icons e-file-document", id: "localFileopen" }
   ],
   select: (args: FileMenuEventArgs) => {
-    if (args.item.id === "fileopen") {
-      open()
-
+    const id = args.item.id
+    switch (id) {
+      case "fileopen":
+        open()
+        break;
+      case "localFileopen":
+        openLocalDrawing()
+        break;
+      default:
+        break;
     }
-
   }
 };
 const lineButton = {
@@ -223,14 +230,20 @@ const removing = (args: RemoveEventArgs) => {
 let drawingNumber = 1;
 //const url = "http://localhost:3000/"
 //const url = "/dwg/"
-const drawings = ["Drawing4.dxf", "S70-04 通信电缆敷设图.dxf"] //, ""dwg2013_04.dwg", " glow.dxf
+const drawings = ["Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, ""dwg2013_04.dwg", " glow.dxf
 //const drawings = [ "draworder3.dxf","draworder2.dxf"]
 //const drawings = ["dwg2013_04.dxf"]
 //const drawings = [ "S70-04 通信电缆敷设图.dxf"]
 //const drawings = [ "text1.dxf","Drawing4.dxf"]
 //const drawings = ["Drawing3.dxf"]
 
+const openLocalDrawing = () =>{
 
+  const drawingName = drawings[(drawingNumber - 1) % 2]
+  const file = new File([""], drawingName)
+  openNewDrawing(file)
+
+}
 
 //TODO: 目前的做法是每次新建一个tab就加载一个dwg文件，后续可以改成下载好文件后再加载，或者新建tab时先不加载文件，等用户切换到该tab时再加载
 const openNewDrawing = (file: File, originalFileName?: string) => {

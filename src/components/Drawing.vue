@@ -71,8 +71,11 @@ onMounted(async () => {
     db = await fileUpload(file, aborter.signal)
   } else {
     const drawingName = file.name
-    db = await cosDownload(`/${drawingName}.pb.${window.encoding}`)
-    //db = await FetchDrawing(`/dwg/${drawingName}.pb`)
+    if(drawingName.endsWith(".pb")){
+      db = await FetchDrawing(`/dwg/${drawingName}`)
+    }else{
+      db = await cosDownload(`/${drawingName}.pb.${window.encoding}`)
+    }
   }
 
   if (!db)

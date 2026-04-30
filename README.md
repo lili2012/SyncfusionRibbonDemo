@@ -16,9 +16,4 @@ C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q
 TODO:
 1. 关闭图纸析构内存
 2. websocket设置channel, 根据channel进行监听
-
 3. 图纸上传显示进度
-
-
-
-

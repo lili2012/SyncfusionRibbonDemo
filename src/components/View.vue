@@ -39,10 +39,6 @@ defineExpose({
 const canvasContainer = useTemplateRef('canvasContainer')
 const container = useTemplateRef('container')
 let viewport: Viewport | undefined
-onBeforeMount(() => {
-
-
-})
 
 function showView() {
   viewport = new Viewport(canvasContainer.value!, props.block, props.db, props.isModel)

@@ -1,7 +1,7 @@
 <template>
   <div id="parent" ref='ParentInstance'>
     <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill"
-      overflowMode='Scrollable' headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false :selected='selected'>
+      overflowMode='Scrollable' headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false >
     </ejs-tab>
     <!-- <Teleport to=".e-tab .e-content > .e-item.e-active">
       <div class="modal">
@@ -16,12 +16,12 @@ const props = defineProps<{
   file: File
 }>()
 
-import { TabComponent as EjsTab, SelectEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { TabComponent as EjsTab, RemoveEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "../utils/FetchDrawing";
-import { useTemplateRef, onMounted, onUnmounted, onBeforeUnmount } from "vue";
+import { useTemplateRef,type App, onMounted, onBeforeUnmount } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
-import { createApp, h, createVNode, render } from 'vue'
+import { createApp, h } from 'vue'
 import CommandLine from './CommandLine.vue';
 import View from './View.vue';
 import { cosDownload } from "@/utils/Cos"
@@ -30,28 +30,28 @@ import { fileUpload } from "@/utils/FileUpload"
 const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 let aborter: AbortController | null = null;
+const appMap = new Map<HTMLDivElement, App>()
 function drawingShowSpinner() {
   showSpinner(this!);
 }
 function drawingHideSpinner() {
   hideSpinner(this!);
 }
-async function waitUntil(condition: () => boolean, timeout = 1000) {
-  const time = 100
-  let acumulateTime = 0
-  while (!condition()) {
-    await new Promise((resolve) => setTimeout(resolve, time));
-    acumulateTime += time
-    if (acumulateTime >= timeout) {
-      return;
+
+const getViewContent = (props) => {
+  const container = document.createElement('div');
+  const app = createApp({
+    render() {
+      return h(View, props);
     }
-  }
+  });
+  app.mount(container);
+
+  appMap.set(container, app)
+  return container;
 }
-// onMounted(() => {
-//   if(aborter){
-//     aborter.abort()
-//   }
-// })
+
+
 onMounted(async () => {
   createSpinner({
     target: ParentInstance.value!,
@@ -71,9 +71,9 @@ onMounted(async () => {
     db = await fileUpload(file, aborter.signal)
   } else {
     const drawingName = file.name
-    if(drawingName.endsWith(".pb")){
+    if (drawingName.endsWith(".pb")) {
       db = await FetchDrawing(`/dwg/${drawingName}`)
-    }else{
+    } else {
       db = await cosDownload(`/${drawingName}.pb.${window.encoding}`)
     }
   }
@@ -102,18 +102,10 @@ onMounted(async () => {
       if (i === 0) {
         isModel = true
       }
-      const viewContainer = document.createElement('div');
-      viewContainer.style.position = 'absolute'
-      viewContainer.style.top = '0'
-      viewContainer.style.bottom = '0'
-      viewContainer.style.left = '0'
-      viewContainer.style.right = '0'
-      viewContainer.style.display = 'flex'
-      // Store the props and component info without mounting
-      viewContainer.dataset.pendingMount = 'true';
-      viewContainer._mountProps = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
 
-      const item = { header: { text: name }, content: viewContainer };
+      const props = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
+
+      const item = { header: { text: name }, content: getViewContent(props) };
       items.push(item)
     }
   }
@@ -122,58 +114,32 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
-onBeforeUnmount(() => {
-  const tabObj = TabInstance.value!.ej2Instances;
-  // tabObj.removeallTabs();
-
-  // console.log(TabInstance.value!.ej2Instances)
-  // ParentInstance.value!.querySelectorAll('.e-item').forEach(item => {
-  //   const content = item.firstChild as HTMLElement
-  //   if (content) {
-  //     render(null, content)
-  //   }
-  // })
-  const n = tabObj.items.length
-  for (let i = n - 1; i >= 0; i--) {
-    const content = tabObj.items[i].content
-    if (content) {
-      render(null, content)
-    }
+onBeforeUnmount(()=>{
+  for(const [element, app] of appMap){
+    app.unmount()
+    element.remove()
   }
+  appMap.clear()
+
 
 })
-const selected = (args: SelectEventArgs) => {
-  // When a tab is selected, check if it has pending components to mount
-  setTimeout(() => {
-    const selectedContent = args.selectedContent;
-    if (selectedContent) {
-      const pendingElements = selectedContent.querySelectorAll('[data-pending-mount="true"]');
-      pendingElements.forEach(element => {
-        if (element._mountProps) {
-          // Now mount the component when the tab is visible
-          const view = createVNode(View, element._mountProps)
+// const removing = (args: RemoveEventArgs) => {
 
-          render(view, element)
-          // Clear the pending flag
-          element.dataset.pendingMount = 'false';
-          const child = element.firstChild as HTMLElement
-          if (child) {
-            if (!args.isInteracted) {
-              const commandline = createVNode(CommandLine)
-              render(commandline, child)
-            }
-          }
-        }
-      });
-
-      const content = selectedContent.parentElement!
-      const commandline = content.querySelectorAll('#commandlineContainer').item(0)
-      const child = selectedContent.firstChild?.firstChild as HTMLElement
-      child.append(commandline)
-
-    }
-  }, 0);
-}
+//   const removedIndex = args.removedIndex
+//   const tabObj = TabInstance.value!.ej2Instances;
+//   const existItems = tabObj.items
+//   const currItem = existItems[removedIndex]
+//   const content = currItem.content
+//   const app = appMap.get(content)
+//   if(app){
+//     app.unmount()
+//     appMap.delete(content)
+//   }
+//   const n = existItems.length
+//   if (removedIndex === (n - 2)) {
+//     tabObj.select(n - 3)
+//   }
+// }
 </script>
 
 <style>

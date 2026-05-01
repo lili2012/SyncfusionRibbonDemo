@@ -30,7 +30,7 @@
 <script setup lang="ts">
 //const props = defineProps<{}>()
 //https://help.autodesk.com/view/OARX/2025/ENU/?guid=GUID-3D998905-0C24-4FF9-A9C7-7F361A591B80
-import { useTemplateRef, watch, ref } from "vue"
+import { useTemplateRef, watch, ref, onBeforeUnmount } from "vue"
 import { useCommandLineStore, CommandStack, drawLineByTwoPoint } from "sgcad"
 import OpenAI from "openai";
 
@@ -144,7 +144,11 @@ const unsubscribe = commandLineStore.$onAction(
     })
   }
 )
+onBeforeUnmount(()=>{
+  unsubscribe()
 
+
+})
 const onMouseleave = (e: MouseEvent) => {
     setTimeout(() => {
       const containerElement = commandlineContainer.value!

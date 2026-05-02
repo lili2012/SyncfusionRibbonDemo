@@ -78,9 +78,11 @@
       </e-ribbon-tab>
     </e-ribbon-tabs>
   </ejs-ribbon>
+  <CommandLine class="float" v-show="isCommandLineVisible" />
   <ejs-tab :selectedItem=0 swipeMode='None' class="content" id="tab" ref='TabInstance' heightAdjustMode="Fill"
     overflowMode='Scrollable' headerPlacement="Top" cssClass="e-fill" :selected='selected' :removing='removing'
     :showCloseButton=true>
+
     <e-tabitems>
       <e-tabitem :header="headerText0" :content="content0"></e-tabitem>
       <e-tabitem :header="headerText1" :content="'introPageComponent'"></e-tabitem>
@@ -91,11 +93,12 @@
       <!-- <e-tabitem :header="headerText2" :content="content2"></e-tabitem> -->
       <e-tabitem :header='addTabHeader' cssClass="withoutIcon"></e-tabitem>
     </e-tabitems>
+
   </ejs-tab>
 </template>
 
 <script setup lang="ts">
-import { createApp,type App, h, provide, useTemplateRef, onMounted, render, ref } from "vue";
+import { createApp, type App, h, provide, useTemplateRef, onMounted, render, ref } from "vue";
 import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
@@ -103,7 +106,7 @@ import { CommandStack } from "sgcad";
 import Drawing from "@/components/Drawing.vue"
 import { useFileDialog } from '@vueuse/core'
 import IntroPage from "@/components/IntroPage.vue"
-
+import CommandLine from './CommandLine.vue';
 const TabInstance = useTemplateRef('TabInstance')
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -161,7 +164,7 @@ const detectMobile = () => {
     activeLayout.value = "Simplified"
   }
 };
-
+const isCommandLineVisible = ref(false)
 onMounted(() => {
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
@@ -194,10 +197,17 @@ const selected = (args: SelectEventArgs) => {
     if (selectedIndex === (n - 1)) {
       addNewPage()
     }
-    //const currItem = existItems[args.selectedIndex]
-    // if(currItem.content.onVisible){
-    //   currItem.content.onVisible()
-    // }
+
+    const currItem = existItems[args.selectedIndex]
+    const content = currItem.content
+    isCommandLineVisible.value = false
+    if (content instanceof HTMLElement) {
+      const canvas = content.querySelector('canvas');
+      if (canvas) {
+        isCommandLineVisible.value = true
+      }
+    }
+
 
     // const previousItem = existItems[args.previousIndex]
     // if(previousItem.content.onHide){
@@ -214,7 +224,7 @@ const removing = (args: RemoveEventArgs) => {
   const currItem = existItems[removedIndex]
   const content = currItem.content
   const app = appMap.get(content)
-  if(app){
+  if (app) {
     app.unmount()
     content.remove()
     appMap.delete(content)
@@ -230,14 +240,9 @@ const removing = (args: RemoveEventArgs) => {
 // }
 
 let drawingNumber = 1;
-//const url = "http://localhost:3000/"
-//const url = "/dwg/"
+
 const drawings = ["Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, ""dwg2013_04.dwg", " glow.dxf
-//const drawings = [ "draworder3.dxf","draworder2.dxf"]
-//const drawings = ["dwg2013_04.dxf"]
-//const drawings = [ "S70-04 通信电缆敷设图.dxf"]
-//const drawings = [ "text1.dxf","Drawing4.dxf"]
-//const drawings = ["Drawing3.dxf"]
+
 
 const openLocalDrawing = () => {
 
@@ -249,6 +254,7 @@ const openLocalDrawing = () => {
 
 //TODO: 目前的做法是每次新建一个tab就加载一个dwg文件，后续可以改成下载好文件后再加载，或者新建tab时先不加载文件，等用户切换到该tab时再加载
 const openNewDrawing = (file: File, originalFileName?: string) => {
+  isCommandLineVisible.value = true
   const tabObj = TabInstance.value!.ej2Instances;
 
   drawingNumber = drawingNumber + 1
@@ -295,6 +301,11 @@ const content0 = "肥西核电站平面设计图是该核电站整体规划与�
 @import "@syncfusion/ej2-vue-navigations/styles/fabric-dark.css";
 @import "@syncfusion/ej2-vue-ribbon/styles/fabric-dark.css";
 @import "@syncfusion/ej2-icons/styles/fabric.css";
+
+.float {
+  position: fixed;
+  z-index: 1000;
+}
 
 .e-tab .e-tab-header .e-toolbar-item.withoutIcon span.e-icons.e-close-icon {
   display: none;

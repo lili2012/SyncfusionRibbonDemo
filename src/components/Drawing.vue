@@ -22,7 +22,7 @@ import { useTemplateRef,type App, onMounted, onBeforeUnmount } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h } from 'vue'
-import CommandLine from './CommandLine.vue';
+
 import View from './View.vue';
 import { cosDownload } from "@/utils/Cos"
 import { fileUpload } from "@/utils/FileUpload"

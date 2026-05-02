@@ -300,7 +300,7 @@ const dragging = (e: MouseEvent) => {
 
 .container {
   position: absolute;
-  bottom: 10px;
+  bottom: 50px;
   left: 25px;
   height: 30px;
   width: calc(100% - 50px);

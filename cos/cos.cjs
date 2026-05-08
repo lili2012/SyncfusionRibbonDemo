@@ -15,66 +15,58 @@ var Region = 'ap-guangzhou';
 
 
 /* 删除指定文件夹下的所有对象（删除存储桶里指定前缀所有对象） */
-function deleteFolder() {
-  var _deleteFolder = function (params, callback) {
-    var deletedList = [];
-    var errorList = [];
-    var marker;
-    var next = function () {
-      params.Marker = marker;
-      cos.getBucket(params, function (err, data) {
-        if (err) return callback(err);
-        var Objects = [];
-        if (data && data.Contents && data.Contents.length) {
-          data.Contents.forEach(function (item) {
-            Objects.push({ Key: item.Key });
-          });
-        }
-        var afterDeleted = function () {
-          if (data.IsTruncated === 'true') {
-            marker = data.NextMarker;
-            next();
-          } else {
-            callback(null, { Deleted: deletedList, Error: errorList });
-          }
-        };
-        if (Objects.length) {
-          cos.deleteMultipleObject(
-            {
-              Bucket: params.Bucket,
-              Region: params.Region,
-              Objects: Objects,
-            },
-            function (err, data) {
-              data.Deleted &&
-                data.Deleted.forEach(function (item) {
-                  deletedList.push(item);
-                });
-              data.Error &&
-                data.Error.forEach(function (item) {
-                  errorList.push(item);
-                });
-              afterDeleted();
-            }
-          );
+
+var deleteFolder = function (params, callback) {
+  var deletedList = [];
+  var errorList = [];
+  var marker;
+  var next = function () {
+    params.Marker = marker;
+    cos.getBucket(params, function (err, data) {
+      if (err) return callback(err);
+      var Objects = [];
+      if (data && data.Contents && data.Contents.length) {
+        data.Contents.forEach(function (item) {
+          Objects.push({ Key: item.Key });
+        });
+      }
+      var afterDeleted = function () {
+        if (data.IsTruncated === 'true') {
+          marker = data.NextMarker;
+          next();
         } else {
-          afterDeleted();
+          console.log("afterDeleted.................................................")
+          callback(null, { Deleted: deletedList, Error: errorList });
         }
-      });
-    };
-    next();
+      };
+      if (Objects.length) {
+        cos.deleteMultipleObject(
+          {
+            Bucket: params.Bucket,
+            Region: params.Region,
+            Objects: Objects,
+          },
+          function (err, data) {
+            data.Deleted &&
+              data.Deleted.forEach(function (item) {
+                deletedList.push(item);
+              });
+            data.Error &&
+              data.Error.forEach(function (item) {
+                errorList.push(item);
+              });
+            afterDeleted();
+          }
+        );
+      } else {
+        afterDeleted();
+      }
+    });
   };
-  _deleteFolder(
-    {
-      Bucket: Bucket,
-      Region: Region,
-      Prefix: 'assets/', // 要列出的目录前缀
-    },
-    function (err, data) {
-      console.log(err || data);
-    }
-  );
-}
+  next();
+};
+
+
 
 /* 上传本地文件夹 */
 function uploadFolder() {
@@ -113,9 +105,14 @@ function uploadFolder() {
   });
 }
 
-deleteFolder();
-uploadFolder()
-// 高级上传
+deleteFolder({Bucket: Bucket, Region: Region, Prefix: 'assets/', },
+  function (err, data) {
+    console.log(err || data);
+    uploadFolder()
+  }
+);
+
+// index.html上传，直接覆盖
 var indexFile = pathLib.resolve(__dirname, '../dist/index.html');
 cos.uploadFile(
   {

@@ -22,7 +22,8 @@ export default defineConfig({
     name: "Cleaning assets folder",
     async buildStart() {
       fs.rmSync(path.resolve(__dirname, './dist/assets'), { recursive: true, force: true });
-    }
+    },
+    apply: 'build',
   },
 
 

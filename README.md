@@ -14,6 +14,5 @@ C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q
 C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q 11 public\dwg\Drawing4.dxf.pb
 
 TODO:
-1. 关闭图纸析构内存
-2. websocket设置channel, 根据channel进行监听
-3. 图纸上传显示进度
+1. websocket设置channel, 根据channel进行监听
+2. 图纸上传显示进度

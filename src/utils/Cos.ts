@@ -25,7 +25,7 @@ const cos = new COS({
         return console.error('credentials invalid:\n' + JSON.stringify(data, null, 2))
       };
       // 检查credentials格式
-      console.log(credentials);
+      //console.log(credentials);
       callback({
         TmpSecretId: credentials.tmpSecretId,
         TmpSecretKey: credentials.tmpSecretKey,

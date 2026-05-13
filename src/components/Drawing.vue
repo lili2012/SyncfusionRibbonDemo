@@ -1,7 +1,8 @@
 <template>
   <div id="parent" ref='ParentInstance'>
+
     <ejs-tab swipeMode='None' class="content" id="innertab" ref='TabInstance' heightAdjustMode="Fill"
-      overflowMode='Scrollable' headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false >
+      overflowMode='Scrollable' headerPlacement="Bottom" cssClass="e-fill" :showCloseButton=false>
     </ejs-tab>
     <!-- <Teleport to=".e-tab .e-content > .e-item.e-active">
       <div class="modal">
@@ -16,9 +17,9 @@ const props = defineProps<{
   file: File
 }>()
 
-import { TabComponent as EjsTab, RemoveEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { TabComponent as EjsTab } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "../utils/FetchDrawing";
-import { useTemplateRef,type App, onMounted, onBeforeUnmount } from "vue";
+import { useTemplateRef, type App, onMounted, onBeforeUnmount } from "vue";
 import { SGDb, cad } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h } from 'vue'
@@ -31,12 +32,7 @@ const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 let aborter: AbortController | null = null;
 const appMap = new Map<HTMLDivElement, App>()
-function drawingShowSpinner() {
-  showSpinner(this!);
-}
-function drawingHideSpinner() {
-  hideSpinner(this!);
-}
+
 
 const getViewContent = (props) => {
   const container = document.createElement('div');
@@ -53,12 +49,18 @@ const getViewContent = (props) => {
 
 
 onMounted(async () => {
+
   createSpinner({
     target: ParentInstance.value!,
+    type:'Fabric'
   });
-  const drawingShowSpinnerBind = drawingShowSpinner.bind(ParentInstance.value!)
-  const drawingHideSpinnerBind = drawingHideSpinner.bind(ParentInstance.value!)
-  drawingShowSpinnerBind()
+
+  showSpinner(ParentInstance.value!);
+
+  setInterval(function () {
+    hideSpinner(ParentInstance.value!);
+  }, 5000);
+
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
@@ -103,7 +105,7 @@ onMounted(async () => {
         isModel = true
       }
 
-      const props = { db: sgdb, block, isModel: i === 0, drawingShowSpinner: drawingShowSpinnerBind, drawingHideSpinner: drawingHideSpinnerBind };
+      const props = { db: sgdb, block, isModel: i === 0 };
 
       const item = { header: { text: name }, content: getViewContent(props) };
       items.push(item)
@@ -114,8 +116,8 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
-onBeforeUnmount(()=>{
-  for(const [element, app] of appMap){
+onBeforeUnmount(() => {
+  for (const [element, app] of appMap) {
     app.unmount()
     element.remove()
   }

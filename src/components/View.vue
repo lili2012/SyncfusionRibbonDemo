@@ -12,46 +12,18 @@ const props = defineProps<{
   db: SGDb,
   block: SGBlock,
   isModel: true,
-  drawingShowSpinner: () => void,
-  drawingHideSpinner: () => void,
 }>()
 
 import { SGDb, Viewport, SGBlock } from "sgcad"
 
-import { useTemplateRef, onMounted, onBeforeMount, App, render, onBeforeUnmount } from "vue";
-
-
-function onVisible() {
-  //SGDb.setCurrentSpace(props.block)
-
-}
-
-function onHide() {
-
-}
-
-defineExpose({
-  onVisible,
-  onHide
-});
-
+import { useTemplateRef, onMounted, onBeforeUnmount } from "vue";
 
 const canvasContainer = useTemplateRef('canvasContainer')
 const container = useTemplateRef('container')
 let viewport: Viewport | undefined
 
-function showView() {
+onMounted(() => {
   viewport = new Viewport(canvasContainer.value!, props.block, props.db, props.isModel)
-  props.drawingHideSpinner()
-}
-onMounted(async () => {
-
-  if (!props.isModel) {
-    props.drawingShowSpinner()
-  }
-  setTimeout(showView, 0)
-
-
 })
 
 onBeforeUnmount(() => {
@@ -61,12 +33,6 @@ onBeforeUnmount(() => {
   }
 
 })
-// ondestroyed() {
-//   this.dxfViewer.Destroy()
-//   this.dxfViewer = null
-// }
-
-
 
 </script>
 <!-- <style module>

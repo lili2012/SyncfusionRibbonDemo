@@ -20,7 +20,7 @@ const props = defineProps<{
 import { TabComponent as EjsTab } from "@syncfusion/ej2-vue-navigations";
 import { FetchDrawing } from "../utils/FetchDrawing";
 import { useTemplateRef, type App, onMounted, onBeforeUnmount } from "vue";
-import { SGDb, cad } from "sgcad"
+import { SGDb, cad, useProgressStore } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
 import { createApp, h } from 'vue'
 
@@ -32,7 +32,7 @@ const TabInstance = useTemplateRef('TabInstance')
 const ParentInstance = useTemplateRef('ParentInstance')
 let aborter: AbortController | null = null;
 const appMap = new Map<HTMLDivElement, App>()
-
+const progressStore = useProgressStore()
 
 const getViewContent = (props) => {
   const container = document.createElement('div');
@@ -49,18 +49,7 @@ const getViewContent = (props) => {
 
 
 onMounted(async () => {
-
-  createSpinner({
-    target: ParentInstance.value!,
-    type:'Fabric'
-  });
-
-  showSpinner(ParentInstance.value!);
-
-  setInterval(function () {
-    hideSpinner(ParentInstance.value!);
-  }, 5000);
-
+  progressStore.percent = 0
   const tabObj = TabInstance.value!.ej2Instances;
   tabObj.animation.previous.effect = 'None'
   tabObj.animation.next.effect = 'None'
@@ -116,6 +105,25 @@ onMounted(async () => {
   //tabObj.select(1)
   //drawingHideSpinner()
 });
+
+
+
+progressStore.$subscribe((mutation, state) => {
+  const percent = state.percent
+  if (percent === 0) {
+    createSpinner({
+      target: ParentInstance.value!,
+      type: 'Fabric'
+    });
+  }
+
+  showSpinner(ParentInstance.value!);
+
+  if(percent === 100){
+    hideSpinner(ParentInstance.value!);
+  }
+})
+
 onBeforeUnmount(() => {
   for (const [element, app] of appMap) {
     app.unmount()

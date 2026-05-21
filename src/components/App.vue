@@ -267,8 +267,8 @@ const openNewDrawing = (file: File, originalFileName?: string) => {
 }
 
 const addNewPage = () => {
-  const drawingName = "Drawing4.dxf"
-  const file = new File([""], "Drawing4.dxf.pb")
+  const drawingName = "box.dwg"
+  const file = new File([""], "box.dwg.pb")
   openNewDrawing(file, drawingName)
 
 }

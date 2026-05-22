@@ -117,13 +117,30 @@ import Drawing from "@/components/Drawing.vue"
 import { useFileDialog } from '@vueuse/core'
 import IntroPage from "@/components/IntroPage.vue"
 import CommandLine from './CommandLine.vue';
+import { getCurrViewport } from "sgcad"
+
 const TabInstance = useTemplateRef('TabInstance')
 const groupButtonSingle = {
   selection: RibbonGroupButtonSelection.Single,
   header: 'Alignment',
   items: [
-    { iconCss: 'svg-3d',  selected: true, click: () => { } },
-    { iconCss: 'svg-2d', click: () => { } }
+    {
+      iconCss: 'svg-2d', selected: true, click: () => {
+        const viewport = getCurrViewport()
+        if (viewport) {
+          viewport.show3d()
+        }
+      }
+    },
+    {
+      iconCss: 'svg-3d', click: () => {
+        const viewport = getCurrViewport()
+        if (viewport) {
+          viewport.show2d()
+        }
+
+      }
+    }
   ]
 }
 
@@ -260,7 +277,7 @@ const removing = (args: RemoveEventArgs) => {
 
 let drawingNumber = 1;
 
-const drawings = ["wall.dwg.pb", "Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, box.dwg, glow.dxf
+const drawings = [ "wall.dwg.pb","Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, box.dwg, glow.dxf
 
 
 const openLocalDrawing = () => {
@@ -322,17 +339,17 @@ const content0 = "肥西核电站平面设计图是该核电站整体规划与�
 @import "@syncfusion/ej2-icons/styles/fabric.css";
 
 .svg-3d {
-    background-image: url('svg/3D.svg');
-    background-repeat: no-repeat;
-    width: 32px;
-    height: 32px;
+  background-image: url('svg/3D.svg');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
 }
 
 .svg-2d {
-    background-image: url('svg/2D.svg');
-    background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
+  background-image: url('svg/2D.svg');
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
 }
 
 .float {

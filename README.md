@@ -16,3 +16,6 @@ C:\Users\shuya\Desktop\vcpkg\installed\x64-windows\tools\brotli\brotli.exe -f -q
 TODO:
 1. websocket设置channel, 根据channel进行监听
 2. 图纸上传显示进度
+
+//text to svg
+https://text-to-svg.com/

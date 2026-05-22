@@ -47,6 +47,16 @@
               </e-ribbon-collection>
             </e-ribbon-collections>
           </e-ribbon-group>
+          <e-ribbon-group header="显示" orientation="Row" groupIconCss="e-icons e-align-center">
+            <e-ribbon-collections>
+              <e-ribbon-collection>
+                <e-ribbon-items>
+                  <e-ribbon-item type="GroupButton" allowedSizes="Small"
+                    :groupButtonSettings="groupButtonSingle"></e-ribbon-item>
+                </e-ribbon-items>
+              </e-ribbon-collection>
+            </e-ribbon-collections>
+          </e-ribbon-group>
         </e-ribbon-groups>
       </e-ribbon-tab>
       <e-ribbon-tab header="协同">
@@ -99,7 +109,7 @@
 
 <script setup lang="ts">
 import { createApp, type App, h, provide, useTemplateRef, onMounted, render, ref } from "vue";
-import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs } from "@syncfusion/ej2-vue-ribbon";
+import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs, RibbonGroupButtonSelection } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
@@ -108,6 +118,15 @@ import { useFileDialog } from '@vueuse/core'
 import IntroPage from "@/components/IntroPage.vue"
 import CommandLine from './CommandLine.vue';
 const TabInstance = useTemplateRef('TabInstance')
+const groupButtonSingle = {
+  selection: RibbonGroupButtonSelection.Single,
+  header: 'Alignment',
+  items: [
+    { iconCss: 'svg-3d',  selected: true, click: () => { } },
+    { iconCss: 'svg-2d', click: () => { } }
+  ]
+}
+
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
 const { files, open, reset, onCancel, onChange } = useFileDialog({
@@ -241,7 +260,7 @@ const removing = (args: RemoveEventArgs) => {
 
 let drawingNumber = 1;
 
-const drawings = ["Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, ""dwg2013_04.dwg", " glow.dxf
+const drawings = ["wall.dwg.pb", "Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, box.dwg, glow.dxf
 
 
 const openLocalDrawing = () => {
@@ -267,8 +286,8 @@ const openNewDrawing = (file: File, originalFileName?: string) => {
 }
 
 const addNewPage = () => {
-  const drawingName = "box.dwg"
-  const file = new File([""], "box.dwg.pb")
+  const drawingName = "Drawing4.dxf"
+  const file = new File([""], "b98ab5a581dec386825dd6f0208bc9f12882b359a11a6fe2f997e7ac855b9829")
   openNewDrawing(file, drawingName)
 
 }
@@ -301,6 +320,20 @@ const content0 = "肥西核电站平面设计图是该核电站整体规划与�
 @import "@syncfusion/ej2-vue-navigations/styles/fabric-dark.css";
 @import "@syncfusion/ej2-vue-ribbon/styles/fabric-dark.css";
 @import "@syncfusion/ej2-icons/styles/fabric.css";
+
+.svg-3d {
+    background-image: url('svg/3D.svg');
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+}
+
+.svg-2d {
+    background-image: url('svg/2D.svg');
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
 
 .float {
   position: fixed;
@@ -369,9 +402,6 @@ const content0 = "肥西核电站平面设计图是该核电站整体规划与�
   justify-content: center;
 }
 
-.e-add-icon::before {
-  content: '\e823';
-}
 
 /* .header {
   flex: 0 1 auto;

@@ -128,7 +128,8 @@ const groupButtonSingle = {
       iconCss: 'svg-2d', selected: true, click: () => {
         const viewport = getCurrViewport()
         if (viewport) {
-          viewport.show3d()
+          viewport.show2d()
+          
         }
       }
     },
@@ -136,7 +137,7 @@ const groupButtonSingle = {
       iconCss: 'svg-3d', click: () => {
         const viewport = getCurrViewport()
         if (viewport) {
-          viewport.show2d()
+          viewport.show3d()
         }
 
       }

@@ -22,7 +22,7 @@ import { FetchDrawing } from "../utils/FetchDrawing";
 import { useTemplateRef, type App, onMounted, onBeforeUnmount } from "vue";
 import { SGDb, cad, useProgressStore } from "sgcad"
 import { hideSpinner, createSpinner, showSpinner } from '@syncfusion/ej2-vue-popups';
-import { createApp, h } from 'vue'
+import { createApp, h,ref } from 'vue'
 
 import View from './View.vue';
 import { cosDownload } from "@/utils/Cos"
@@ -33,7 +33,7 @@ const ParentInstance = useTemplateRef('ParentInstance')
 let aborter: AbortController | null = null;
 const appMap = new Map<HTMLDivElement, App>()
 const progressStore = useProgressStore()
-
+const backgroundColor = ref('white')
 const getViewContent = (props) => {
   const container = document.createElement('div');
   const app = createApp({
@@ -94,7 +94,7 @@ onMounted(async () => {
         isModel = true
       }
 
-      const props = { db: sgdb, block, isModel: i === 0 };
+      const props = { db: sgdb, block, isModel: i === 0, backgroundColor: backgroundColor.value};
 
       const item = { header: { text: name }, content: getViewContent(props) };
       items.push(item)
@@ -196,7 +196,7 @@ onBeforeUnmount(() => {
 #parent {
   height: 100%;
   width: 100%;
-  background-color: black;
+  background-color: v-bind(backgroundColor);
 }
 
 .ribbonTemplate {

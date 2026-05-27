@@ -33,7 +33,7 @@ const ParentInstance = useTemplateRef('ParentInstance')
 let aborter: AbortController | null = null;
 const appMap = new Map<HTMLDivElement, App>()
 const progressStore = useProgressStore()
-const backgroundColor = ref('white')
+const backgroundColor = ref('black')
 const getViewContent = (props) => {
   const container = document.createElement('div');
   const app = createApp({

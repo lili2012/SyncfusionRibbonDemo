@@ -369,14 +369,14 @@ const content0 = "肥西核电站平面设计图是该核电站整体规划与�
 @import "@syncfusion/ej2-icons/styles/fabric.css";
 
 .svg-3d {
-  background-image: url('svg/3D.svg');
+  background-image: url('/svg/3D.svg');
   background-repeat: no-repeat;
   width: 32px;
   height: 32px;
 }
 
 .svg-2d {
-  background-image: url('svg/2D.svg');
+  background-image: url('/svg/2D.svg');
   background-repeat: no-repeat;
   width: 16px;
   height: 16px;

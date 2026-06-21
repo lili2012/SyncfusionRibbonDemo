@@ -1,5 +1,5 @@
 <template>
-  <ejs-listview id='element' ref='list' :fields='fields' :select='onSelect'></ejs-listview>
+  <ejs-listview id='element' ref='list' :fields='fields' height="100%" :select='onSelect'></ejs-listview>
 </template>
 
 <script setup lang="ts">

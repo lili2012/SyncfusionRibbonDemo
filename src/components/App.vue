@@ -1,5 +1,5 @@
 <template>
-  <ejs-ribbon class="header" :fileMenu="fileSettings" :activeLayout="activeLayout">
+  <ejs-ribbon ref="RibbonInstance" class="header" :fileMenu="fileSettings" :activeLayout="activeLayout">
     <e-ribbon-tabs>
       <e-ribbon-tab header="常用">
         <e-ribbon-groups>
@@ -51,7 +51,7 @@
             <e-ribbon-collections>
               <e-ribbon-collection>
                 <e-ribbon-items>
-                  <e-ribbon-item type="GroupButton" allowedSizes="Small"
+                  <e-ribbon-item id="viewButtons" type="GroupButton" allowedSizes="Small"
                     :groupButtonSettings="groupButtonSingle"></e-ribbon-item>
                 </e-ribbon-items>
               </e-ribbon-collection>
@@ -109,7 +109,7 @@
 
 <script setup lang="ts">
 import { createApp, type App, h, provide, useTemplateRef, onMounted, render, ref } from "vue";
-import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs, RibbonGroupButtonSelection } from "@syncfusion/ej2-vue-ribbon";
+import { RibbonFileMenu, RibbonColorPicker, FileMenuEventArgs, RibbonGroupButtonSelection, RIBBON_GROUP_BUTTON_ID } from "@syncfusion/ej2-vue-ribbon";
 import { RibbonItemSize, RibbonComponent as EjsRibbon, RibbonGroupDirective as ERibbonGroup, RibbonGroupsDirective as ERibbonGroups, RibbonCollectionsDirective as ERibbonCollections, RibbonCollectionDirective as ERibbonCollection, RibbonItemsDirective as ERibbonItems, RibbonItemDirective as ERibbonItem, RibbonTabsDirective as ERibbonTabs, RibbonTabDirective as ERibbonTab } from "@syncfusion/ej2-vue-ribbon";
 import { TabComponent as EjsTab, TabItemsDirective as ETabitems, TabItemDirective as ETabitem, SelectEventArgs, RemoveEventArgs, TabItem } from "@syncfusion/ej2-vue-navigations";
 import { CommandStack } from "sgcad";
@@ -117,9 +117,13 @@ import Drawing from "@/components/Drawing.vue"
 import { useFileDialog } from '@vueuse/core'
 import IntroPage from "@/components/IntroPage.vue"
 import CommandLine from './CommandLine.vue';
-import { getCurrViewport } from "sgcad"
+import { getCurrViewport, useViewStore } from "sgcad"
+
+const viewStore = useViewStore()
 
 const TabInstance = useTemplateRef('TabInstance')
+const RibbonInstance = useTemplateRef('RibbonInstance')
+
 const groupButtonSingle = {
   selection: RibbonGroupButtonSelection.Single,
   header: 'Alignment',
@@ -144,6 +148,31 @@ const groupButtonSingle = {
     }
   ]
 }
+
+viewStore.$subscribe((mutation, state) => {
+  if (mutation.type == "direct") {
+    const is2D = state.is2D
+    const viewButtons = RibbonInstance.value.ej2Instances.getItem('viewButtons')
+    const items = viewButtons.groupButtonSettings.items
+
+    const item0 = items[0]
+    const item1 = items[1]
+    item0.setProperties({ selected: is2D }, false);
+    item1.setProperties({ selected: !is2D }, false);
+    const element0 = document.querySelector('#' + viewButtons.id + RIBBON_GROUP_BUTTON_ID + 0)!
+    const element1 = document.querySelector('#' + viewButtons.id + RIBBON_GROUP_BUTTON_ID + 1)!
+
+    element0.classList.remove('e-active')
+    element1.classList.remove('e-active')
+
+    if (is2D) {
+      element0.classList.add('e-active')
+    } else {
+      element1.classList.add('e-active')
+    }
+  }
+
+})
 
 provide('ribbon', [RibbonFileMenu, RibbonColorPicker]);
 
@@ -278,7 +307,7 @@ const removing = (args: RemoveEventArgs) => {
 
 let drawingNumber = 1;
 
-const drawings = [ "wall.dwg.pb","Drawing4.dxf.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, box.dwg, glow.dxf
+const drawings = ["wall.dwg.pb", "Drawing4.dwg.pb", "S70-04 通信电缆敷设图.dxf.pb"] //, box.dwg, glow.dxf
 
 
 const openLocalDrawing = () => {

@@ -3,7 +3,7 @@ import { createApp} from 'vue'
 import { registerLicense } from '@syncfusion/ej2-base';
 import { useSelectionSetStore, useCommandLineStore, useProgressStore, useViewStore } from 'sgcad';
 import { createPinia } from 'pinia'
-registerLicense('Ngo9BigBOggjGyl/VkV+XU9AclREQmFMYVF2R2VJdlR1cl9DZEwxOX1dQl9lSXtRcEdiXHZdcHVQT2NXUkc=');
+registerLicense('Ngo9BigBOggjGyl/VkV+XU9AclRFQmFOYVF2R2VJe1R1d19FZkwgOX1dQl9lSXhRcUVnXHtbc3ZVQGRXUkc=');
 const pinia = createPinia()
 const app = createApp(App)
 useSelectionSetStore(pinia)
